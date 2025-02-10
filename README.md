@@ -1,8 +1,12 @@
-# CVE_AGILE
+# CVE AGILE
 
+## Web Application README Portion
 
+Please do not push to git with a full node_module folder.
+This is to be deleted before add, commit and push. 
+Run NPM install to install the node_modules.
 
-## Getting started
+## GIT LAB READ ME BELOW
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
