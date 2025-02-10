@@ -2,9 +2,10 @@
 
 ## Web Application README Portion
 
-Please do not push to git with a full node_module folder.
+Please do not push to git with a full node_module folder to save space and upload time.
 This is to be deleted before add, commit and push. 
 Run NPM install to install the node_modules.
+(Should we do this? Or should we just upload the whole node_modules folder too?)
 
 ## GIT LAB READ ME BELOW
 
