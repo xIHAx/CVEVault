@@ -64,7 +64,17 @@ const authRoutes = require('./routes/auth');
 
 // Instructing the app to use these routes
 app.use('/', mainRoutes);
-app.use('/', authRoutes/**.router TO REMOVE ONCE JS SETUP*/);
+app.use('/', authRoutes/**.router TO REMOVE COMMENT ONCE JS SETUP*/);
+
+// Security Headers to protect against XSS
+app.use((req, res, next) => {
+    res.set({
+        'X-Frame-Options': 'DENY',
+        'X-Content-Type-Options': 'nosniff',
+        'X-XSS-Protection': '1; mode=block'
+    });
+    next();
+});
 
 // Listening for HTTP requests
 app.listen(port, () => {
