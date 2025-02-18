@@ -60,13 +60,15 @@ app.use(session({
 
 // Adding route handlers
 const mainRoutes = require('./routes/mainpage');
-const authRoutes = require('./routes/auth');
+const loginRoutes = require('./routes/login');
+const signupRoutes = require('./routes/signup');
 
 // Instructing the app to use these routes
 app.use('/', mainRoutes);
+app.use('/', signupRoutes);
 app.use('/', authRoutes/**.router TO REMOVE COMMENT ONCE JS SETUP*/);
 
-// Security Headers to protect against XSS
+// Security Headers to protect against XSS - Mention in report
 app.use((req, res, next) => {
     res.set({
         'X-Frame-Options': 'DENY',
