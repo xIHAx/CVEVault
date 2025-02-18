@@ -66,7 +66,7 @@ const signupRoutes = require('./routes/signup');
 // Instructing the app to use these routes
 app.use('/', mainRoutes);
 app.use('/', signupRoutes);
-app.use('/', authRoutes/**.router TO REMOVE COMMENT ONCE JS SETUP*/);
+app.use('/', loginRoutes.router);
 
 // Security Headers to protect against XSS - Mention in report
 app.use((req, res, next) => {
