@@ -21,10 +21,32 @@ function isLoggedIn(req, res, next) {
 }
 
 /**
- * Login Route | NOT TESTED
+ * GET Login Route | NOT TESTED
+ */
+router.get('/login', (req, res) => {
+    try{
+        // Checks for logged in user
+        if (req.session && req.session.userid){
+            // Redirects user if logged in
+            return res.redirect('/mainpage');
+        } else {
+            // Renders login page if not logged in
+            return res.render('login', 
+                {
+                    errors: []
+                }
+            );
+        }
+    } catch (error) {
+        return res.status(500).send('An eror occured fetching the login page. Please try again.');
+    }
+});
+
+/**
+ * POST Login Route | NOT TESTED
  * Handles the login for users
  */
-router.get('/login',
+router.post('/login',
     [
         // SERVER SIDE VALIDATION HERE
     ], 
@@ -61,6 +83,7 @@ router.get('/login',
  * Handles the destroying of session
  */
 router.get('/logout', (req, res) => {
+    // Destroying session and routing user to login page
     req.session.destroy(() => {
         return res.redirect('/login');
     });
