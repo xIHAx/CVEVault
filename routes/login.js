@@ -64,18 +64,35 @@ router.post('/login',
                 );
             }
 
-            /**
-             * -> Retrieve data from database matching username
-             * -> If no match return login page with message
-             * -> If match use bcrypt to check the match
-             */
-        } catch (error) {
-            /**
-             * Return server error
-             */
-        }
+            // Comparing if user exists in database
+            const userCheck = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
 
-        return res.render('LOGIN PAGE PLACEHOLDER');
+            // If user does not exist inform user
+            if(!userCheck){
+                return res.render('login',
+                    {
+                        errors: [{ msg: 'Invalid username or password'}]
+                    }
+                );
+            }
+
+            // Comparing if password is correct
+            const passwordCheck = await bcrypt.compare(password, userCheck.password);
+
+            if(!passwordCheck){
+                return res.render('login',
+                    {
+                        errors: [{ msg: 'Invalid username or password'}]
+                    }
+                );
+            }
+
+            // Store user id in session
+            req.session.userid = userCheck._id;
+            return res.redirect('/mainpage');
+        } catch (error) {
+            return res.status(500).send('Error encountered submitting details');
+        }
 });
 
 /**
