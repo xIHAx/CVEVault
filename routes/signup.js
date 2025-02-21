@@ -28,4 +28,53 @@ router.get('/signup', (req, res) => {
     }
 });
 
+/**
+ * POST SignUp Router | NOT TESTED
+ * Handles the submission of registration
+ */
+router.post('/signup', 
+    [
+        // SERVER SIDE VALIDATION
+    ],
+    async (req, res) => {
+        try{
+            const errors = validationResult(req);
+
+            // Passing server side validation errors back
+            if(!errors.isEmpty()){
+                return res.render('signup',
+                    {
+                        errors: errors.array()
+                    }
+                );
+            }
+
+            // Existing User Check
+            const userExist = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+
+            if(userExist){
+                return res.render('signup', 
+                    {
+                        errors: [{ msg: 'Username already exists'}]
+                    }
+                );
+            }
+
+            // Hashing password provided
+            const hashedPass = await bcrypt.hash(req.body.password, 10);
+
+            const newUser = new SCHEMA({
+                username: req.body.username,
+                password: hashedPass
+            });
+
+            await newUser.save();
+
+            return res.redirect('/login');
+        } catch (error) {
+            console.log('Sign Up POST Error:', error);
+            return res.status(500).send('An error occured submitting information. Please try again.');
+        }
+});
+
 module.exports = router;
