@@ -39,7 +39,6 @@ mongoose.connect(mongoURI, {
 .catch(err => {
     console.error('Connection error to MongoDB: ', err);
     // process.exit(1);
-    // Uncomment above for when actual DB uri provided
 });
 
 // Setting up session
@@ -47,7 +46,7 @@ app.use(session({
     secret: sessionKey,
     resave: false,
     saveUninitialized: true,
-    /** Uncomment once db connection setup
+    /** Uncomment if decided to be usd
     store: MongoStore.create({
         mongoURL: mongoURI,
         ttl: 24 * 60 * 60 // TTL for session store set as a day

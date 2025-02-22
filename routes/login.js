@@ -21,7 +21,7 @@ function isLoggedIn(req, res, next) {
 }
 
 /**
- * GET Login Route | NOT TESTED
+ * GET Login Route | 
  */
 router.get('/login', (req, res) => {
     try{
@@ -43,7 +43,7 @@ router.get('/login', (req, res) => {
 });
 
 /**
- * POST Login Route | NOT TESTED
+ * POST Login Route | 
  * Handles the login for users
  */
 router.post('/login',

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 
 /**
- * GET SignUp Router | NOT TESTED
+ * GET SignUp Router | 
  * Handles the display of sign up page to users
  */
 router.get('/signup', (req, res) => {
@@ -29,7 +29,7 @@ router.get('/signup', (req, res) => {
 });
 
 /**
- * POST SignUp Router | NOT TESTED
+ * POST SignUp Router | 
  * Handles the submission of registration
  */
 router.post('/signup', 
