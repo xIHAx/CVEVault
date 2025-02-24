@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Log in</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Log in to your account</h1>
+        <form action = "/login" method="POST">
+            <div>
+                <label for="email">Email:</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+            <button type="submit">Log in</button>
+        </form>
+        <!-- include forget password -->
+        <p>Forgot password?<a href="/forgot_pass">Click here</a></p>
+        <p>Want to create an account? <a href="/signup">Sign up</a></p>
+    </body>
+</html>

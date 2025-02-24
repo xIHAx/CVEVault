@@ -38,7 +38,7 @@ mongoose.connect(mongoURI, {
 })
 .catch(err => {
     console.error('Connection error to MongoDB: ', err);
-    // process.exit(1);
+    process.exit(1);
 });
 
 // Setting up session
