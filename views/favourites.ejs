@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Favourites Page</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- Header -->
+    <h1 class="title">Favourites Page</h1>
+
+    <!-- Top Buttons -->
+<div class="top-buttons">
+    <div class="left-buttons">
+      <button class="btn" onclick="window.location.href='/'">Main</button>
+      <button id="cveSearchBtnFav" class="btn" onclick="transformToInput('cveSearchBtnFav', 'cveSearchFav')">CVE ID Search</button>
+    </div>
+  
+    <div class="center-buttons">
+      <button id="vendorSearchBtnFav" class="btn" onclick="transformToInput('vendorSearchBtnFav', 'vendorSearchFav')">Vendor Search</button>
+      <button id="productSearchBtnFav" class="btn" onclick="transformToInput('productSearchBtnFav', 'productSearchFav')">Product Search</button>
+    </div>
+  
+    <div class="right-buttons">
+      <button class="btn small">Login</button>
+      <button class="btn small">Sign Up</button>
+      <button class="btn small">Save</button>
+      <button class="btn small">Remove</button>
+    </div>
+  </div>
+  
+
+    <!-- CVE Table -->
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Vendor</th>
+            <th>Product</th>
+            <th>Base Score</th>
+            <th>Base Severity</th>
+            <th>CWE</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (favourites.length === 0) { %>
+            <tr>
+              <td colspan="6" style="text-align: center;">No favourites added.</td>
+            </tr>
+          <% } else { %>
+            <% favourites.forEach(fav => { %>
+              <tr>
+                <td><%= fav.id %></td>
+                <td><%= fav.vendor %></td>
+                <td><%= fav.product %></td>
+                <td><%= fav.baseScore %></td>
+                <td><%= fav.baseSeverity %></td>
+                <td><%= fav.cwe %></td>
+                <td>
+                  <form action="/remove-favourite" method="POST">
+                    <input type="hidden" name="cveId" value="<%= fav.id %>">
+                    <button type="submit">❌ Remove</button>
+                  </form>
+                </td>
+              </tr>
+            <% }); %>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+  <script src="/script.js"></script>
+</body>
+</html>
