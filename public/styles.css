@@ -6,7 +6,7 @@ body {
 }
 
 /* Main Container */
-.container {
+.main-container {
   width: 80%;
   margin: auto;
   padding: 20px;
@@ -43,7 +43,7 @@ body {
   gap: 10px;
 }
 
-/* Right Buttons - Adjusted Layout for Remove Button */
+/* Right Buttons - Adjusted Layout */
 .right-buttons {
   display: grid;
   grid-template-columns: repeat(2, auto);
@@ -52,7 +52,7 @@ body {
 }
 
 /* Button Styling */
-.btn {
+.btn-custom {
   background: #e0e0e0;
   border: 2px solid black;
   padding: 6px 15px;
@@ -63,7 +63,7 @@ body {
 }
 
 /* Small Buttons (Login, Sign Up, Save, Remove) */
-.btn.small {
+.btn-custom.small {
   padding: 4px 10px;
   font-size: 12px;
 }
@@ -96,6 +96,7 @@ th {
   font-weight: bold;
 }
 
+
 /* Search Bar Styling */
 .search-container {
   display: flex;
@@ -104,14 +105,18 @@ th {
   margin-top: 10px;
 }
 
+/* Search Input Styling */
 .search-input {
-  width: 50%;
-  padding: 8px;
-  border: 1px solid black;
+  width: 200px;
+  height: 30px;
   border-radius: 20px;
-  font-size: 1rem;
+  border: 2px solid black;
   text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
 }
+
 
 /* CVE Title */
 .cve-title {

@@ -26,32 +26,35 @@ function transformToInput(buttonId, inputId) {
 
     // Add listener to revert input to button when clicking outside
     document.addEventListener('click', function revertOnClickOutside(event) {
-        if (event.target !== input && event.target !== button) {
+        if (!input.contains(event.target) && event.target !== button) {
             restoreButton(inputId);
             document.removeEventListener('click', revertOnClickOutside);
         }
     });
 }
 
-// Helper function to restore the button from input field
+// Function to correctly restore the button when clicking outside
 function restoreButton(inputId) {
     let input = document.getElementById(inputId);
     if (!input) return;
 
     let btn = document.createElement("button");
     btn.id = inputId.replace("Search", "Btn");
-    btn.className = "btn";
+    btn.className = "btn btn-custom";
 
-    if (inputId === 'cveSearch') btn.innerText = 'CVE ID Search';
-    if (inputId === 'vendorSearch') btn.innerText = 'Vendor Search';
-    if (inputId === 'productSearch') btn.innerText = 'Product Search';
+    // Set correct button text
+    if (inputId === "cveSearch") btn.innerText = "CVE ID Search";
+    if (inputId === "vendorSearch") btn.innerText = "Vendor Search";
+    if (inputId === "productSearch") btn.innerText = "Product Search";
 
-    btn.onclick = function() { transformToInput(btn.id, inputId) };
+    btn.onclick = function() {
+        transformToInput(btn.id, inputId);
+    };
+
+    // Replace input field with the restored button
     input.parentNode.replaceChild(btn, input);
-
-    // Clear filter when restoring button
-    filterTable(-1);  // Resets filtering
 }
+
 
 // Function to filter the Main CVE table based on the selected search category
 function filterTable(columnIndex) {
@@ -75,30 +78,6 @@ function filterTable(columnIndex) {
     for (let i = 1; i < rows.length; i++) {
         let cells = rows[i].getElementsByTagName("td");
         let match = cells[columnIndex].innerText.toLowerCase().includes(filterValue);
-        rows[i].style.display = match ? "" : "none";
-    }
-}
-
-// Function to filter the favourites table
-function filterFavouritesTable() {
-    let input = document.getElementById("favouritesSearchInput");
-    if (!input) return;
-
-    let filterValue = input.value.toLowerCase();
-    let table = document.getElementById("favouritesTable");
-    let rows = table.getElementsByTagName("tr");
-
-    for (let i = 1; i < rows.length; i++) { // Skip header row
-        let cells = rows[i].getElementsByTagName("td");
-        let match = false;
-
-        for (let j = 0; j < cells.length - 1; j++) { // Exclude Action column
-            if (cells[j].innerText.toLowerCase().includes(filterValue)) {
-                match = true;
-                break;
-            }
-        }
-
         rows[i].style.display = match ? "" : "none";
     }
 }
@@ -128,20 +107,21 @@ function transformToInput(buttonId, inputId) {
     input.focus();
 
     document.addEventListener('click', function revertOnClickOutsideFav(event) {
-        if (event.target !== input && event.target !== button) {
+        if (!input.contains(event.target) && event.target !== button) {
             restoreButtonFav(inputId);
             document.removeEventListener('click', revertOnClickOutsideFav);
         }
     });
 }
 
+// Function to correctly restore the button on the favourites page
 function restoreButtonFav(inputId) {
     let input = document.getElementById(inputId);
     if (!input) return;
 
     let btn = document.createElement("button");
     btn.id = inputId.replace("SearchFav", "SearchBtnFav");
-    btn.className = "btn";
+    btn.className = "btn btn-custom";
 
     if (inputId === 'cveSearchFav') btn.innerText = 'CVE ID Search';
     if (inputId === 'vendorSearchFav') btn.innerText = 'Vendor Search';
@@ -154,26 +134,3 @@ function restoreButtonFav(inputId) {
     filterFavouritesTableByColumn(-1);
 }
 
-function filterFavouritesTableByColumn(columnIndex) {
-    let table = document.getElementById("favouritesTable");
-    let rows = table.getElementsByTagName("tr");
-
-    if (columnIndex === -1) {
-        for (let i = 1; i < rows.length; i++) {
-            rows[i].style.display = "";
-        }
-        return;
-    }
-
-    let inputId = ["cveSearchFav", "vendorSearchFav", "productSearchFav"][columnIndex];
-    let input = document.getElementById(inputId);
-    if (!input) return;
-
-    let filterValue = input.value.toLowerCase();
-
-    for (let i = 1; i < rows.length; i++) {
-        let cells = rows[i].getElementsByTagName("td");
-        let match = cells[columnIndex].innerText.toLowerCase().includes(filterValue);
-        rows[i].style.display = match ? "" : "none";
-    }
-}
