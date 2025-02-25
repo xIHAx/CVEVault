@@ -4,21 +4,33 @@ const express = require("express");
 const { body, validationResult } = require("express-validator");
 const router = express.Router();
 
+const cveSchema = require('../schema/cve');
+
 /**
  * GET Main Page Router |
  * Retrieves and sends all cve data
  */
 router.get('/', async (req, res) => {
     try {
-        // Retrieving all cve details
-        const cveDetails = await CVESCHEMA.find({});
+        /**
+            const vendorSearch = req.params.vendor ? req.params.vendor.trim() : "";
+            const cveidSearch
+            const productSearch
 
+            if (searchQuery)
+            // Retrieving all cve details
+        **/
+        const cveDetails = await cveSchema.findById('67b0bc30fa40d64ac2fd7388');
+
+        console.log(cveDetails);
+        /** Temp Comment for Database Testing
         // Sending the cve data to the ejs
         return res.render('mainpage',
             {
                 cve_details: cveDetails
             }
         );
+        */
     } catch (error) {
         return res.status(500).send('An error encountered when retrieving the main page. Please try again.');
     }
@@ -102,9 +114,11 @@ router.get('/cve:id', async (req, res) => {
     }
 });
 
-router.get('/search:SEARCH PARAMETERS', (req, res) => {
-    // To discuss how search should be done with ryann
-    return res.render('SEARCH PAGE PLACEHOLDER');
+
+router.get('/cvesearch:search', (req, res) => {
+    
+    
+    return res.render('mainpage');
 });
 
 module.exports = router;

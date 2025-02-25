@@ -1,6 +1,5 @@
 /**
  * Main Entry Point for the Web Application
- * NOTE THAT THIS VERSION HAS NOT BEEN TESTED
  */
 
 // Necessary Packages for the Web Application
@@ -18,10 +17,9 @@ const port = 3000;
 
 // Session Key on each server run
 const sessionKey = crypto.randomBytes(32).toString('hex');
-console.log(sessionKey);
 
 // MongoDB URI
-const mongoURI = 'MONGODB URI';
+const mongoURI = 'mongodb+srv://elliotgiang:4CvDC07Ccoq6DJAt@cluster0.lpqq6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
 // Setting up the dependencies
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -31,17 +29,14 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 
 // Setting up connection with database (MongoDB)
-mongoose.connect(mongoURI, {
-    useNewURLParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log('Successfully connected to MongoDB');
-})
-.catch(err => {
-    console.error('Connection error to MongoDB: ', err);
-    process.exit(1);
-});
+mongoose.connect(mongoURI)
+    .then(() => {
+        console.log('Successfully connected to MongoDB');
+    })
+    .catch(err => {
+        console.error('Connection error to MongoDB: ', err);
+        process.exit(1);
+    });
 
 // Setting up session
 app.use(session({
