@@ -8,8 +8,10 @@ const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
-const MongoStore = require('connect-mongo');
-
+/**
+ * Uncomment if used
+ * const MongoStore = require('connect-mongo');
+*/
 const app = express();
 const bodyParser = require('body-parser');
 const port = 3000;
@@ -46,7 +48,7 @@ app.use(session({
     secret: sessionKey,
     resave: false,
     saveUninitialized: true,
-    /** Uncomment if decided to be usd
+    /** Uncomment if decided to be use
     store: MongoStore.create({
         mongoURL: mongoURI,
         ttl: 24 * 60 * 60 // TTL for session store set as a day
