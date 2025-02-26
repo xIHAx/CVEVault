@@ -206,3 +206,76 @@ th {
 .back-btn:hover {
   background: #333;
 }
+
+/* Centering the login box */
+.login-box {
+  background: #e0e0e0;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+/* Styling for inputs */
+.login-input {
+  border: 2px solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Social Login Buttons */
+.social-btn {
+  width: 120px;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+/* Sign in Button */
+.login-btn {
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+/* Back to Main Link */
+.back-to-main {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+/* Custom Background for Forms */
+.bg-custom {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+/* Input Field Styling */
+.input-custom {
+  border: 2px solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Password Complexity Box */
+.password-box {
+  background: #f8f9fa;
+  text-align: center;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  border: 2px solid black;
+}
+
+/* Password Strength Bar */
+.progress {
+  height: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}

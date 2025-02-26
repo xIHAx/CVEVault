@@ -9,38 +9,43 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 
-let favourites = []; // Store favourite vulnerabilities
+let favourites = []; // Store favourite vulnerabilities (to be handled by MongoDB backend)
 
-// Route to render the Main Page 
+// Home Route
 app.get("/", (req, res) => {
-  res.render("main", { vulnerabilities: [] }); 
+    res.render("main", { vulnerabilities: [] });
 });
 
-// Route to render the Favourites Page
+// Favourites Page
 app.get("/favourites", (req, res) => {
-  res.render("favourites", { favourites });
+    res.render("favourites", { favourites });
+});
+
+// Login Page
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
+// Sign Up Page
+app.get("/signup", (req, res) => {
+    res.render("signup");
 });
 
 // Add item to favourites
 app.post("/add-favourite", (req, res) => {
-  const cveId = req.body.cveId;
+    const cveId = req.body.cveId;
+    if (!cveId) {
+        return res.status(400).send("Invalid request: Missing CVE ID");
+    }
+    
+    const selectedVuln = {}; // Placeholder, MongoDB will handle this
 
-  const selectedVuln = {}; // Placeholder - should be fetched from the backend
-
-  if (selectedVuln && !favourites.find((f) => f.id === cveId)) {
-    favourites.push(selectedVuln);
-  }
-  res.redirect("/favourites");
+    if (!favourites.find(fav => fav.id === cveId)) {
+        favourites.push(selectedVuln);
+    }
+    res.redirect("/favourites");
 });
 
-// Remove item from favourites
-app.post("/remove-favourite", (req, res) => {
-  const cveId = req.body.cveId;
-  favourites = favourites.filter((f) => f.id !== cveId);
-  res.redirect("/favourites");
-});
-
-// Start Server
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });

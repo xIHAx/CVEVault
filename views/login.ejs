@@ -1,32 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Log in</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="container">
-      <div class="form-wrapper">
-        <a href="/" class="homelink">Back to Home</a>
-        <h1>Log in to your account</h1>
-        <form action="/login" method="POST">
-          <div>
-            <label for="email">Email:</label>
-            <input type="email" name="email" id="email" required />
-          </div>
-          <div>
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" required />
-          </div>
-          <button type="submit">Log in</button>
-        </form>
-        <div>
-          <!-- include forget password -->
-          <p>Forgot password? <a href="/forgot_pass">Click here</a></p>
-          <p>Want to create an account? <a href="/signup">Sign up</a></p>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign in</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+  </style>
+</head>
+<body>
+
+  <a href="/" class="btn btn-custom back-to-main">⬅ Back to Main</a>
+  
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="login-box p-4 shadow-lg">
+      
+      <!-- Sign in Title -->
+      <h2 class="text-center mb-4">Sign in</h2>
+
+      <!-- Login Form -->
+      <form action="/login" method="POST">
+        <!-- Username Input -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" id="username" class="form-control text-center login-input" placeholder="Enter your username" name="username" autocomplete="username" required>
         </div>
+
+        <!-- Password Input -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" id="password" class="form-control text-center login-input" placeholder="Enter your password" name="password" autocomplete="current-password" required>
+        </div>
+
+        <!-- Google & GitHub Buttons -->
+        <div class="d-flex justify-content-center gap-3 mb-3">
+          <a href="/auth/google" class="btn btn-secondary social-btn"><i class="fab fa-google"></i> Google</a>
+          <a href="/auth/github" class="btn btn-secondary social-btn"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+
+        <!-- Sign in Button -->
+        <button type="submit" class="btn btn-dark w-100 login-btn">Sign in</button>
+      </form>
+
+      <!-- Reset & Sign Up Links -->
+      <div class="text-center mt-3">
+        <a href="/forgot" class="text-decoration-none">Reset password</a> |
+        <a href="/signup" class="text-decoration-none">Sign up</a>
       </div>
     </div>
-  </body>
+  </div>
+
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="/script.js"></script>
+</body>
 </html>

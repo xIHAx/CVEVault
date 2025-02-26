@@ -23,19 +23,19 @@
       <!-- Left Side Buttons -->
       <div class="left-buttons">
         <button class="btn btn-custom" onclick="window.location.href='/'">Main</button>
-        <button id="cveSearchBtnFav" class="btn btn-custom" onclick="transformToInput('cveSearchBtnFav', 'cveSearchFav')">CVE ID Search</button>
+        <button id="cveSearchBtn" class="search-btn btn btn-custom">CVE ID Search</button>
       </div>
 
       <!-- Center Buttons -->
       <div class="center-buttons">
-        <button id="vendorSearchBtnFav" class="btn btn-custom" onclick="transformToInput('vendorSearchBtnFav', 'vendorSearchFav')">Vendor Search</button>
-        <button id="productSearchBtnFav" class="btn btn-custom" onclick="transformToInput('productSearchBtnFav', 'productSearchFav')">Product Search</button>
+        <button id="vendorSearchBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productSearchBtn" class="search-btn btn btn-custom">Product Search</button>
       </div>
 
       <!-- Right Side Buttons -->
       <div class="right-buttons">
-        <button class="btn btn-custom small">Login</button>
-        <button class="btn btn-custom small">Sign Up</button>
+        <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
+        <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
         <button class="btn btn-custom small">Save</button>
         <button class="btn btn-custom small btn-danger">Remove</button>
       </div>
@@ -70,7 +70,7 @@
                 <td><%= fav.baseSeverity %></td>
                 <td><%= fav.cwe %></td>
                 <td>
-                  <form action="/remove-favourite" method="POST">
+                  <form action="/remove-favourite" method="POST" onsubmit="return confirm('Are you sure you want to remove this favourite?');">
                     <input type="hidden" name="cveId" value="<%= fav.id %>">
                     <button type="submit" class="btn btn-danger btn-sm">❌ Remove</button>
                   </form>
@@ -81,7 +81,6 @@
         </tbody>
       </table>
     </div>
-
   </div>
 
   <script src="/script.js"></script>
