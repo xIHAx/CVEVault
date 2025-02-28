@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= cve.id %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- CVE Title -->
+    <h2 class="cve-title"><%= cve.id %></h2>
+
+    <!-- CVE Information Table -->
+    <div class="cve-info">
+      <div class="cve-header">
+        <div class="cve-box"><strong>Description</strong></div>
+        <div class="cve-box"><strong>Product</strong></div>
+        <div class="cve-box"><strong>Vendor</strong></div>
+      </div>
+
+      <div class="cve-header-values">
+        <div class="cve-box"><%= cve.description || "No description available" %></div>
+        <div class="cve-box"><%= cve.product %></div>
+        <div class="cve-box"><%= cve.vendor %></div>
+      </div>
+    </div>
+
+    <!-- CVE Scores Section -->
+    <div class="cve-scores">
+      <div class="score-box"><strong>Base score</strong><br><span><%= cve.baseScore %></span></div>
+      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.baseSeverity %></span></div>
+      <div class="score-box"><strong>CVSS</strong><br><span>----</span></div>
+      <div class="score-box"><strong>Exploitability score</strong><br><span>000</span></div>
+      <div class="score-box"><strong>Impact score</strong><br><span>000</span></div>
+    </div>
+
+    <!-- CWE and References Section -->
+    <div class="cve-extra">
+      <div class="cwe-box"><strong>CWE-ID</strong><br><span><%= cve.cwe %></span></div>
+      <div class="reference-box">
+        <strong>References</strong>
+        <p>Something here regarding the CVE and give links to the people who first found it</p>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <button onclick="window.history.back()" class="back-btn">🔙 Back</button>
+  </div>
+</body>
+</html>

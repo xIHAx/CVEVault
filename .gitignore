@@ -1,1 +1,2 @@
-download_automation_py/downloadvenv
+node_modules/
+*.zip
