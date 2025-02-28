@@ -3,6 +3,7 @@
 const express = require('express');
 const { body, validationResult } =  require('express-validator');
 const bcrypt = require('bcrypt');
+const userSchema = require('../schema/user');
 
 // Router object for route handling
 const router = express.Router();
@@ -65,7 +66,7 @@ router.post('/login',
             }
 
             // Comparing if user exists in database
-            const userCheck = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+            const userCheck = await userSchema.findOne({ username: req.body.username });
 
             // If user does not exist inform user
             if(!userCheck){
