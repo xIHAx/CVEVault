@@ -1,10 +1,10 @@
 NodeJS Packages Installed
 
-"bcrypt": "^5.1.1", PASSWORD ENCRYPTION
+"bcrypt": "^5.1.1", 
 "body-parser": "^1.20.3", 
 "ejs": "^3.1.10",
 "express": "^4.21.2",
-"express-session": "^1.18.1", SESSION
-"express-validator": "^7.2.1", SERVER SIDE VALIDATION
-"mongoose": "^8.10.1", CONNECT W MONGODB
-"connect-mongo": "^5.1.0" COMMUNICATION WITH MONGODB
+"express-session": "^1.18.1", 
+"express-validator": "^7.2.1", 
+"mongoose": "^8.10.1", 
+"connect-mongo": "^5.1.0" 
