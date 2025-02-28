@@ -5,7 +5,6 @@ const cveSchema = new mongoose.Schema({
     description : String,
     body : String,
     dateCreated : Date
-
 });
 
 module.exports =  mongoose.model("cves", cveSchema);

@@ -15,9 +15,6 @@ const app = express();
 const bodyParser = require('body-parser');
 const port = 3000;
 
-// Session Key on each server run
-const sessionKey = crypto.randomBytes(32).toString('hex');
-
 // MongoDB URI
 const mongoURI = 'mongodb+srv://elliotgiang:4CvDC07Ccoq6DJAt@cluster0.lpqq6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 
@@ -38,7 +35,12 @@ mongoose.connect(mongoURI)
         process.exit(1);
     });
 
-// Setting up session
+/** Session Related Functions */
+
+// Creating a new session key on each run
+const sessionKey = crypto.randomBytes(32).toString('hex');
+
+// Enabling the use of sessions
 app.use(session({
     secret: sessionKey,
     resave: false,
@@ -53,6 +55,8 @@ app.use(session({
         maxAge: 24 * 60 * 60 // Cookies expire in a day
     }
 }));
+
+/** Handling Routes */
 
 // Adding route handlers
 const mainRoutes = require('./routes/mainpage');
