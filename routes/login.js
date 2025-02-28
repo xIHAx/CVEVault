@@ -1,0 +1,109 @@
+/** Authentication Related Routes */
+
+const express = require('express');
+const { body, validationResult } =  require('express-validator');
+const bcrypt = require('bcrypt');
+
+// Router object for route handling
+const router = express.Router();
+
+/** 
+ * isLoggedIn Function | 
+ * Checks if user is logged in
+ * Used for favourite function
+ */
+function isLoggedIn(req, res, next) {
+    if (req.session && req.session.userid) {
+        next();
+    } else {
+        res.redirect('/login');
+    }
+}
+
+/**
+ * GET Login Route | 
+ */
+router.get('/login', (req, res) => {
+    try{
+        // Checks for logged in user
+        if (req.session && req.session.userid){
+            // Redirects user if logged in
+            return res.redirect('/mainpage');
+        } else {
+            // Renders login page if not logged in
+            return res.render('login', 
+                {
+                    errors: []
+                }
+            );
+        }
+    } catch (error) {
+        return res.status(500).send('An eror occured fetching the login page. Please try again.');
+    }
+});
+
+/**
+ * POST Login Route | 
+ * Handles the login for users
+ */
+router.post('/login',
+    [
+        // SERVER SIDE VALIDATION HERE
+    ], 
+    async (req, res) => {
+        
+        try {
+            const errors = validationResult(req);
+
+            // Passing server side validation errors back
+            if(!errors.isEmpty()){
+                return res.render('login',
+                    {
+                        errors: errors.array()
+                    }
+                );
+            }
+
+            // Comparing if user exists in database
+            const userCheck = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+
+            // If user does not exist inform user
+            if(!userCheck){
+                return res.render('login',
+                    {
+                        errors: [{ msg: 'Invalid username or password'}]
+                    }
+                );
+            }
+
+            // Comparing if password is correct
+            const passwordCheck = await bcrypt.compare(password, userCheck.password);
+
+            if(!passwordCheck){
+                return res.render('login',
+                    {
+                        errors: [{ msg: 'Invalid username or password'}]
+                    }
+                );
+            }
+
+            // Store user id in session
+            req.session.userid = userCheck._id;
+            return res.redirect('/mainpage');
+        } catch (error) {
+            return res.status(500).send('Error encountered submitting details');
+        }
+});
+
+/**
+ * Logout Route |
+ * Handles the destroying of session
+ */
+router.get('/logout', (req, res) => {
+    // Destroying session and routing user to login page
+    req.session.destroy(() => {
+        return res.redirect('/login');
+    });
+});
+
+module.exports = { router, isLoggedIn };
