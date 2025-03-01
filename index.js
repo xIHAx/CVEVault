@@ -62,11 +62,13 @@ app.use(session({
 const mainRoutes = require('./routes/mainpage');
 const loginRoutes = require('./routes/login');
 const signupRoutes = require('./routes/signup');
+const favRoutes = require('./routes/favourites');
 
 // Instructing the app to use these routes
 app.use('/', mainRoutes);
 app.use('/', signupRoutes);
 app.use('/', loginRoutes.router);
+app.use('/', favRoutes);
 
 // Security Headers to protect against XSS - Mention in report
 app.use((req, res, next) => {
