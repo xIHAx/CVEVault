@@ -25,7 +25,7 @@ router.get('/', async (req, res) => {
         // console.log(cveDetails);
         
         // Sending the cve data to the ejs
-        return res.render('mainpage',
+        return res.render('main',
             {
                 vulnerabilities: cveDetails
             }

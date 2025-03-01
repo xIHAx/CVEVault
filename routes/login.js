@@ -47,10 +47,7 @@ router.get('/login', (req, res) => {
  * POST Login Route | 
  * Handles the login for users
  */
-router.post('/login',
-    [
-        // SERVER SIDE VALIDATION HERE
-    ], 
+router.post('/login', 
     async (req, res) => {
         
         try {
@@ -70,28 +67,39 @@ router.post('/login',
 
             // If user does not exist inform user
             if(!userCheck){
+                /**
                 return res.render('login',
                     {
                         errors: [{ msg: 'Invalid username or password'}]
                     }
                 );
+                */
+
+                // Debugging
+                return res.status(500).send('wrong user');
             }
 
             // Comparing if password is correct
-            const passwordCheck = await bcrypt.compare(password, userCheck.password);
+            const passwordCheck = await bcrypt.compare(req.body.password, userCheck.password);
 
             if(!passwordCheck){
+                /**
                 return res.render('login',
                     {
                         errors: [{ msg: 'Invalid username or password'}]
                     }
                 );
+                */
+
+                // Debugging
+                return res.status(500).send('wrong pass');
             }
 
             // Store user id in session
             req.session.userid = userCheck._id;
-            return res.redirect('/mainpage');
+            return res.redirect('/');
         } catch (error) {
+            console.log(error);
             return res.status(500).send('Error encountered submitting details');
         }
 });

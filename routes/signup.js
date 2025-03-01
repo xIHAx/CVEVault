@@ -2,6 +2,7 @@
 const express = require("express");
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const userSchema = require('../schema/user');
 
 // Router object for route handling
 const router = express.Router();
@@ -33,39 +34,42 @@ router.get('/signup', (req, res) => {
  * Handles the submission of registration
  */
 router.post('/signup', 
-    [
-        // SERVER SIDE VALIDATION
-    ],
     async (req, res) => {
         try{
             const errors = validationResult(req);
 
             // Passing server side validation errors back
+            /**
             if(!errors.isEmpty()){
                 return res.render('signup',
                     {
                         errors: errors.array()
                     }
                 );
-            }
+            }*/
 
             // Existing User Check
-            const userExist = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+            const userExist = await userSchema.findOne({ username: req.body.username });
 
             if(userExist){
+                /** 
                 return res.render('signup', 
                     {
                         errors: [{ msg: 'Username already exists'}]
                     }
                 );
+                **/
+               return res.status(500).send('user exists');
             }
 
             // Hashing password provided
             const hashedPass = await bcrypt.hash(req.body.password, 10);
 
-            const newUser = new SCHEMA({
+            const newUser = new userSchema({
                 username: req.body.username,
-                password: hashedPass
+                password: hashedPass,
+                email: req.body.email,
+                dateCreated: Date.now()
             });
 
             await newUser.save();
