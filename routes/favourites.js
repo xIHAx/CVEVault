@@ -16,7 +16,7 @@ router.get('/favourites', async (req, res) => {
     try {
         if (req.session && req.session.userid ) {
             const user = await userSchema.findById(req.session.userid);
-            const cveDetails = await cveSchema.find({ cveid: { $in: user.favourites }});
+            const cveDetails = await cveSchema.find({ _id: { $in: user.favourites }});
 
             return res.render('favourites',
                 {
@@ -38,10 +38,10 @@ router.get('/favourites', async (req, res) => {
 router.post('/addfavourite:id', async (req, res) => {
     try {
         const user_id = req.session.userid;
-        const {cve_id} = req.body.cveid;
+        const cve_id = req.body.cveid;
 
         // Ensures the cve selected exists
-        const cveExists = await cveSchema.findById({ cve_id });
+        const cveExists = await cveSchema.findById( cve_id );
 
         if(!cveExists) {
             return res.status(404).send('The cve being selected does not exist.');
@@ -68,12 +68,16 @@ router.post('/addfavourite:id', async (req, res) => {
 router.post('/remove-favourite', async (req, res) => {
     try {
         const user_id = req.session.userid;
-        const {cve_id} = req.body.cveid;
+        const cve_id = req.body.cveId;
 
         // Ensures the cve selected exists
-        const cveExists = await cveSchema.findById({ cve_id });
+        const cveExists = await cveSchema.findById( cve_id );
 
         if(!cveExists) {
+            /**
+            // Debugging code
+            console.log(cve_id);
+            */
             return res.status(404).send('The cve being selected does not exist.');
         }
 

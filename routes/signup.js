@@ -40,7 +40,6 @@ router.post('/signup',
             // Uncomment if using
             /**
             const errors = validationResult(req);
-
             
             if(!errors.isEmpty()){
                 return res.render('signup',
