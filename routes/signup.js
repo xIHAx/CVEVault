@@ -36,10 +36,12 @@ router.get('/signup', (req, res) => {
 router.post('/signup', 
     async (req, res) => {
         try{
+            // Passing server side validation errors back
+            // Uncomment if using
+            /**
             const errors = validationResult(req);
 
-            // Passing server side validation errors back
-            /**
+            
             if(!errors.isEmpty()){
                 return res.render('signup',
                     {
@@ -52,14 +54,16 @@ router.post('/signup',
             const userExist = await userSchema.findOne({ username: req.body.username });
 
             if(userExist){
-                /** 
                 return res.render('signup', 
                     {
                         errors: [{ msg: 'Username already exists'}]
                     }
                 );
-                **/
-               return res.status(500).send('user exists');
+                
+                
+                // Debugging code
+                // return res.status(500).send('user exists');
+                
             }
 
             // Hashing password provided
@@ -69,7 +73,7 @@ router.post('/signup',
                 username: req.body.username,
                 password: hashedPass,
                 email: req.body.email,
-                dateCreated: Date.now()
+                dateCreated: Date.now() 
             });
 
             await newUser.save();

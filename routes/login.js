@@ -51,9 +51,11 @@ router.post('/login',
     async (req, res) => {
         
         try {
-            const errors = validationResult(req);
-
             // Passing server side validation errors back
+            // Uncomment if used
+            /**
+            const errors = validationResult(req);
+            
             if(!errors.isEmpty()){
                 return res.render('login',
                     {
@@ -61,38 +63,36 @@ router.post('/login',
                     }
                 );
             }
+            */
 
             // Comparing if user exists in database
             const userCheck = await userSchema.findOne({ username: req.body.username });
 
             // If user does not exist inform user
             if(!userCheck){
-                /**
                 return res.render('login',
                     {
                         errors: [{ msg: 'Invalid username or password'}]
                     }
                 );
-                */
 
-                // Debugging
-                return res.status(500).send('wrong user');
+                // Debugging Code
+                // return res.status(500).send('wrong user');
             }
 
             // Comparing if password is correct
             const passwordCheck = await bcrypt.compare(req.body.password, userCheck.password);
 
             if(!passwordCheck){
-                /**
                 return res.render('login',
                     {
                         errors: [{ msg: 'Invalid username or password'}]
                     }
                 );
-                */
+                
 
-                // Debugging
-                return res.status(500).send('wrong pass');
+                // Debugging Code
+                // return res.status(500).send('wrong pass');
             }
 
             // Store user id in session
