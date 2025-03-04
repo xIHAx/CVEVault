@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const cveSchema = require('../schema/cve');
+const userSchema = require('../schema/user');
 
 /**
  * GET Main Page Router |
@@ -21,13 +22,29 @@ router.get('/', async (req, res) => {
         // Retrieves all cve data in the database
         const cveDetails = await cveSchema.find({});
 
+        let username = "";
+
+        // Retrieving username if user logged in
+        if(req.session && req.session.userid) {
+            // Retrieving username from database
+            const user = await userSchema.findById(req.session.userid).select('username');
+        
+            // Setting username retrieved as username variable
+            if(user) {
+                username = user.username;
+            } else {
+                return res.status(500).send('Error: User logged in does not have a username.');
+            }
+        }
+
         /** Debugging for cve retrieval */
         // console.log(cveDetails);
         
         // Sending the cve data to the ejs
         return res.render('main',
             {
-                vulnerabilities: cveDetails
+                vulnerabilities: cveDetails,
+                username: username
             }
         );
     } catch (error) {

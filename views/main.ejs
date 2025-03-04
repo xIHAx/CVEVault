@@ -34,8 +34,15 @@
 
       <!-- Right Side Buttons -->
       <div class="right-buttons">
-        <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
-        <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
+        <% if (username) { %>
+          <button class="btn btn-custom small"><%= username %></button>
+          <form id="logout" action="/logout" method="get">
+            <button type="submit" class="btn btn-custom small">Logout</button>
+          </form>
+        <% } else { %>
+          <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
+          <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
+        <% } %>
         <button class="btn btn-custom small">Save</button>
         <button class="btn btn-custom small">Favourite</button>
       </div>

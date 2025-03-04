@@ -10,8 +10,7 @@ const router = express.Router();
 
 /** 
  * isLoggedIn Function | 
- * Checks if user is logged in
- * Used for favourite function
+ * Checks if user is logged in for routers
  */
 function isLoggedIn(req, res, next) {
     if (req.session && req.session.userid) {

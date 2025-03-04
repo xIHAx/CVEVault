@@ -8,6 +8,8 @@ const userSchema = require('../schema/user');
 // Router object for route handling
 const router = express.Router();
 
+router.use
+
 /**
  * GET SignUp Router | 
  * Handles the display of sign up page to users
@@ -16,7 +18,7 @@ router.get('/signup', (req, res) => {
     try{
         // Checks for logged in user
         if(req.session && req.session.userid){
-            return res.render('main');
+            return res.redirect('/');
         }
 
         // Renders the sign up page if no logged in user
