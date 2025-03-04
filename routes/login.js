@@ -1,7 +1,7 @@
-/** Authentication Related Routes */
+/** Login Related Routes */
 
 const express = require('express');
-const { body, validationResult } =  require('express-validator');
+const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const userSchema = require('../schema/user');
 
@@ -29,7 +29,7 @@ router.get('/login', (req, res) => {
         // Checks for logged in user
         if (req.session && req.session.userid){
             // Redirects user if logged in
-            return res.redirect('/mainpage');
+            return res.redirect('/');
         } else {
             // Renders login page if not logged in
             return res.render('login', 
@@ -109,10 +109,14 @@ router.post('/login',
  * Handles the destroying of session
  */
 router.get('/logout', (req, res) => {
-    // Destroying session and routing user to login page
-    req.session.destroy(() => {
-        return res.redirect('/login');
-    });
+    try{
+        // Destroying session and routing user to login page
+        req.session.destroy(() => {
+            return res.redirect('/');
+        });
+    } catch (error) {
+        return res.status(500).send('An error occured logging out. Please try again.');
+    }
 });
 
 module.exports = { router, isLoggedIn };

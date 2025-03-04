@@ -1,4 +1,5 @@
-// Importing Express, Express Validator and Bcrypt
+/** Sign Up Relayted Routes */
+
 const express = require("express");
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
@@ -15,7 +16,7 @@ router.get('/signup', (req, res) => {
     try{
         // Checks for logged in user
         if(req.session && req.session.userid){
-            return res.render('mainpage');
+            return res.render('main');
         }
 
         // Renders the sign up page if no logged in user
