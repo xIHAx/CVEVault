@@ -25,9 +25,6 @@ router.get('/favourites', async (req, res) => {
                 favourites: cveDetails
             }
         );
-        
-
-        return res.render('login');
     } catch (error) {
         return res.status(500).send('An error occured fetching the favourites page. Please try again.');
     }
@@ -46,8 +43,8 @@ router.post('/add-favourites', async (req, res) => {
         const cveExists = await cveSchema.find({_id: { $in: cve_ids } });
 
         // Debugging Code
-        //console.log('Cve_Ids', cve_ids.length);
-        //console.log('cevExists', cveExists.length);
+        console.log('Cve_Ids', cve_ids);
+        console.log('cveExists', cveExists.length);
 
         if(cveExists.length !== cve_ids.length) {
             return res.status(404).send('One or more CVEs selected does not exist.');
@@ -62,6 +59,7 @@ router.post('/add-favourites', async (req, res) => {
         return res.redirect('/favourites');
 
     } catch (error) {
+        console.log(error);
         return res.status(500).send('An error occured adding to favourites. Please try again.');
     }
 });

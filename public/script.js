@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (event.target.id === "addFavBtn") {
-            alert("Are you sure you want to add the selected CVEs to favourites?");
+            confirm("Are you sure you want to add the selected CVEs to favourites?");
             handleAction("favourite", "favSelected");
         }
 
