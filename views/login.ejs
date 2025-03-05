@@ -33,10 +33,13 @@
           <input type="password" id="password" class="form-control text-center login-input" placeholder="Enter your password" name="password" autocomplete="current-password" required>
         </div>
 
-        <!-- Google & GitHub Buttons -->
+        <!-- Error Messages -->
         <div class="d-flex justify-content-center gap-3 mb-3">
-          <a href="/auth/google" class="btn btn-secondary social-btn"><i class="fab fa-google"></i> Google</a>
-          <a href="/auth/github" class="btn btn-secondary social-btn"><i class="fab fa-github"></i> GitHub</a>
+            <% if (error) {%>
+              <div class="alert alert-danger">
+                <%= error %>
+              </div>
+            <% } %>
         </div>
 
         <!-- Sign in Button -->

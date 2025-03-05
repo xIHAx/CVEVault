@@ -33,7 +33,7 @@ router.get('/login', (req, res) => {
             // Renders login page if not logged in
             return res.render('login', 
                 {
-                    errors: []
+                    error: null
                 }
             );
         }
@@ -71,7 +71,7 @@ router.post('/login',
             if(!userCheck){
                 return res.render('login',
                     {
-                        errors: [{ msg: 'Invalid username or password'}]
+                        error: 'Invalid username or password'
                     }
                 );
 
@@ -85,7 +85,7 @@ router.post('/login',
             if(!passwordCheck){
                 return res.render('login',
                     {
-                        errors: [{ msg: 'Invalid username or password'}]
+                        error: 'Invalid username or password'
                     }
                 );
                 
