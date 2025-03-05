@@ -2,22 +2,15 @@ const express = require("express");
 const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
+const { compareSync } = require("bcrypt");
 
 /** 
  * Function for the cleaning of descriptions
  */
-function filterDescription(desc, cwes) {
+function filterDescription(desc, cwes, cpes) {
 
     if (desc.includes('Rejected reason:')) {
         return null;
-    }
-
-    let product = '';
-
-    const productMatch = desc.match(/Product:\s*([^V\n]+)/i);
-
-    if(productMatch) {
-        product = productMatch[1].trim().replace(/,\s*$/, '');
     }
 
     let filterDesc = desc.replace(/Product:\s*.*/, '').trim();
@@ -26,10 +19,31 @@ function filterDescription(desc, cwes) {
         cwe === 'NVD-CWE-noinfo' || cwe === 'NVD-CWE-Other' ? '-' : cwe
     );
 
+    const vendors = [];
+    const products = [];
+    const vendorDupe = new Set();
+
+    if (cpes && compareSync.length > 0) {
+        cpes.forEach(cpe => {
+            
+            if(!vendorDupe.has(cpe.vendor)) {
+                vendorDupe.add(cpe.vendor);
+                vendors.push(cpe.vendor);
+            }
+
+            if(cpe.version === '-'){
+                cpe.version = '';
+            }
+
+            products.push(`${cpe.product} ${cpe.version}`);
+        });
+    }
+
     return {
         filterDesc,
-        product,
-        filteredCwe
+        filteredCwe,
+        products,
+        vendors
     }
 }
 
@@ -48,11 +62,12 @@ router.get('/', async (req, res) => {
                                         const filteredCve = cve.toObject();
 
                                         // Filtering description
-                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType);
+                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
 
                                         if (filteredDesc) {
                                             filteredCve.Description = filteredDesc.filterDesc;
-                                            filteredCve.Product = filteredDesc.product;
+                                            filteredCve.Products = filteredDesc.products;
+                                            filteredCve.Vendors = filteredDesc.vendors;
                                             filteredCve.ProblemType = filteredDesc.filteredCwe;
                                             return filteredCve;
                                         }
@@ -77,7 +92,7 @@ router.get('/', async (req, res) => {
         }
 
         /** Debugging for cve retrieval */
-        // console.log(cveDetails);
+        // console.log(filteredCveDetails);
         
         // Sending the cve data to the ejs
         return res.render('main',
@@ -104,7 +119,7 @@ router.get('/cve/:cve_id', async (req, res) => {
         const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
         
         // Filtering description
-        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType);
+        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
 
         if (!filteredDesc) {
             return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
@@ -113,7 +128,8 @@ router.get('/cve/:cve_id', async (req, res) => {
         const filteredCveDetails = {
             ...cveDetails.toObject(),
             Description: filteredDesc.filterDesc,
-            Product: filteredDesc.product,
+            Products: filteredDesc.products,
+            Vendors: filteredDesc.vendors,
             ProblemType: filteredDesc.filteredCwe
         }
 
@@ -124,6 +140,18 @@ router.get('/cve/:cve_id', async (req, res) => {
         );
     } catch (error) {
         return res.status(500).send('An error occured fetching the CVE page. Please try again');
+    }
+});
+
+/**
+ * Export CSV POST Router |
+ */
+router.post('/export-cve', async (req, res) => {
+    try {
+        const cve_ids = JSON.parse(req.body.selectedVulns || "[]");
+
+    } catch (error) {
+        return res.status(500).send('An error occured posting the export. Please try again');
     }
 });
 
