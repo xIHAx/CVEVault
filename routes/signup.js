@@ -8,8 +8,6 @@ const userSchema = require('../schema/user');
 // Router object for route handling
 const router = express.Router();
 
-router.use
-
 /**
  * GET SignUp Router | 
  * Handles the display of sign up page to users
@@ -24,7 +22,8 @@ router.get('/signup', (req, res) => {
         // Renders the sign up page if no logged in user
         return res.render('signup',
             {
-                errors: []
+                emailError: null,
+                nameError: null
             }
         );
     } catch (error) {
@@ -54,18 +53,27 @@ router.post('/signup',
 
             // Existing User Check
             const userExist = await userSchema.findOne({ username: req.body.username });
+            // Existing Email Check
+            const emailExist = await userSchema.findOne({ email: req.body.email });
+
+            let emailError = null;
+            let userError = null;
 
             if(userExist){
-                return res.render('signup', 
+                userError = 'Username already taken.'    
+            }
+
+            if(emailExist){
+                emailError = 'Email already used.'
+            }
+
+            if(userExist || emailExist) {
+                return res.render('signup',
                     {
-                        errors: [{ msg: 'Username already exists'}]
+                        emailError: emailError,
+                        nameError: userError
                     }
                 );
-                
-                
-                // Debugging code
-                // return res.status(500).send('user exists');
-                
             }
 
             // Hashing password provided

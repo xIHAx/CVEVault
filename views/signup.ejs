@@ -24,9 +24,18 @@
                             <div class="col-md-6">
                                 <form action="/signup" method="POST">
                                     <!-- Username Input -->
-                                    <div class="mb-3">
-                                        <label for="username" class="form-label">Username</label>
-                                        <input type="text" name="username" id="username" class="form-control input-custom" placeholder="Enter your username" autocomplete="username" required>
+                                    <div class="mb-4 signup-error-container">
+                                        <div class="signup-input-wrapper">
+                                            <div class="w-100">
+                                                <label for="username" class="form-label">Username</label>
+                                                <input type="text" name="username" id="username" class="form-control input-custom" placeholder="Enter your username" autocomplete="username" required>
+                                                <% if (nameError) { %>
+                                                    <div class="signup-error-message">
+                                                        <%= nameError %>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
                                     </div>
                                     
                                     <!-- Password Input -->
@@ -42,9 +51,18 @@
                                     </div>
 
                                     <!-- Email Input -->
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" name="email" id="email" class="form-control input-custom" placeholder="Enter your email" autocomplete="email" required>
+                                    <div class="mb-4 signup-error-container">
+                                        <div class="signup-input-wrapper">
+                                            <div class="w-100">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" name="email" id="email" class="form-control input-custom" placeholder="Enter your email" autocomplete="email" required>
+                                                <% if (emailError) { %>
+                                                    <div class="signup-error-message">
+                                                        <%= emailError %>
+                                                    </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <!-- Sign Up Button -->
