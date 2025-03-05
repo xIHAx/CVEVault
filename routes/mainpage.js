@@ -39,16 +39,6 @@ function filterDescription(desc, cwes) {
  */
 router.get('/', async (req, res) => {
     try {
-        /**
-            const vendorSearch = req.params.vendor ? req.params.vendor.trim() : "";
-            const cveidSearch = req.params.cve_id ? req.params.cve_id.trim() : "";
-            const productSearch = req.params.product ? req.params.product.trim() : "";
-
-            if (vendorSearch) {
-                
-            }
-        **/
-
         // Retrieves all cve data in the database
         const cveDetails = await cveSchema.find({});
 
@@ -106,11 +96,11 @@ router.get('/', async (req, res) => {
  * GET CVE Router |
  * Retrieves and sends data for the selected CVE
  */
-router.get('/:id', async (req, res) => {
+router.get('/cve/:cve_id', async (req, res) => {
 
     try {
         // Retrieving CVE ID from URL
-        const cve_id = req.params.id;
+        const cve_id = req.params.cve_id;
         const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
         
         // Filtering description
@@ -136,6 +126,8 @@ router.get('/:id', async (req, res) => {
         return res.status(500).send('An error occured fetching the CVE page. Please try again');
     }
 });
+
+
 
 
 module.exports = router;

@@ -34,9 +34,14 @@
 
       <!-- Right Side Buttons -->
       <div class="right-buttons">
-        <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
-        <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
-        <button class="btn btn-custom small">Save</button>
+        <button class="btn btn-custom small"><%= username %></button>
+        <form id="logout" action="/logout" method="get">
+            <button type="submit" class="btn btn-custom small">Logout</button>
+        </form>
+        <form id="export" action="/export-cves" method="POST">
+          <input type="hidden" name="selectedVulns" id="exportSelected">
+          <button id="exportBtn" class="btn btn-custom small">Export</button>
+        </form>
         <form id="remove" action="/remove-favourites" method="POST">
           <input type="hidden" name="selectedVulns" id="removeSelected">
           <button id="removeBtn" class="btn btn-custom small">Remove</button>

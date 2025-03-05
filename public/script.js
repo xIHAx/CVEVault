@@ -4,9 +4,9 @@ document.addEventListener("DOMContentLoaded", () => {
             convertButtonToSearch(event.target);
         }
 
-        if (event.target.id === "saveBtn") {
+        if (event.target.id === "exportBtn") {
             alert("Are you sure you want to export the selected CVEs?");
-            handleAction("save", "saveSelected");
+            handleAction("export", "exportSelected");
         }
 
         if (event.target.id === "addFavBtn") {

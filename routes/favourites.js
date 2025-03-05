@@ -14,16 +14,18 @@ router.use(isLoggedIn);
  */
 router.get('/favourites', async (req, res) => {
     try {
-        if (req.session && req.session.userid ) {
-            const user = await userSchema.findById(req.session.userid);
-            const cveDetails = await cveSchema.find({ _id: { $in: user.favourites }});
+        const user = await userSchema.findById(req.session.userid);
+        const cveDetails = await cveSchema.find({ _id: { $in: user.favourites }});
 
-            return res.render('favourites',
-                {
-                    favourites: cveDetails
-                }
-            );
-        }
+        const username = user.username;
+
+        return res.render('favourites',
+            {
+                username: username,
+                favourites: cveDetails
+            }
+        );
+        
 
         return res.render('login');
     } catch (error) {

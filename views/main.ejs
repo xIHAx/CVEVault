@@ -43,7 +43,10 @@
           <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
           <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
         <% } %>
-        <button id="saveBtn" class="btn btn-custom small">Save</button>
+        <form id="export" action="/export-cves" method="POST">
+          <input type="hidden" name="selectedVulns" id="exportSelected">
+          <button id="exportBtn" class="btn btn-custom small">Export</button>
+        </form>
         <form id="favourite" action="/add-favourites" method="POST">
           <input type="hidden" name="selectedVulns" id="favSelected">
           <button id="addFavBtn" class="btn btn-custom small">Favourite</button>
@@ -68,7 +71,7 @@
         <tbody>
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
-              <td><a href='/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
+              <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
               <td><%= vuln.Vendor %></td>
               <td><%= vuln.Product %></td>
               <td><%= vuln.BaseMetricV3.baseScore %></td>
