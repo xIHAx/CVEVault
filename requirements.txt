@@ -7,4 +7,5 @@ NodeJS Packages Installed
 "express-session": "^1.18.1", 
 "express-validator": "^7.2.1", 
 "mongoose": "^8.10.1", 
-"connect-mongo": "^5.1.0" 
+"connect-mongo": "^5.1.0",
+"csv-writer": "^1.6.0"
