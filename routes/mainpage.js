@@ -3,6 +3,36 @@ const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
 
+/** 
+ * Function for the cleaning of descriptions
+ */
+function filterDescription(desc, cwes) {
+
+    if (desc.includes('Rejected reason:')) {
+        return null;
+    }
+
+    let product = '';
+
+    const productMatch = desc.match(/Product:\s*([^V\n]+)/i);
+
+    if(productMatch) {
+        product = productMatch[1].trim().replace(/,\s*$/, '');
+    }
+
+    let filterDesc = desc.replace(/Product:\s*.*/, '').trim();
+
+    const filteredCwe = cwes.map(cwe => 
+        cwe === 'NVD-CWE-noinfo' ? '-' : cwe
+    );
+    
+    return {
+        filterDesc,
+        product,
+        filteredCwe
+    }
+}
+
 /**
  * GET Main Page Router |
  * Retrieves and sends all cve data
@@ -21,6 +51,25 @@ router.get('/', async (req, res) => {
 
         // Retrieves all cve data in the database
         const cveDetails = await cveSchema.find({});
+
+        const filteredCveDetails = cveDetails
+                                    .map(cve => {
+                                        // Assigning original cve details to protect original data
+                                        const filteredCve = cve.toObject();
+
+                                        // Filtering description
+                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType);
+
+                                        if (filteredDesc) {
+                                            filteredCve.Description = filteredDesc.filterDesc;
+                                            filteredCve.Product = filteredDesc.product;
+                                            filteredCve.ProblemType = filteredDesc.filteredCwe;
+                                            return filteredCve;
+                                        }
+
+                                        return null;
+                                    })
+                                    .filter(Boolean);
 
         let username = "";
 
@@ -43,11 +92,12 @@ router.get('/', async (req, res) => {
         // Sending the cve data to the ejs
         return res.render('main',
             {
-                vulnerabilities: cveDetails,
+                vulnerabilities: filteredCveDetails,
                 username: username
             }
         );
     } catch (error) {
+        console.log(error);
         return res.status(500).send('An error encountered when retrieving the main page. Please try again.');
     }
 });

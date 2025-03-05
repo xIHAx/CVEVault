@@ -69,11 +69,11 @@
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
               <td><%= vuln.CVE_ID %></td>
-              <td><%= vuln.vendor %></td>
-              <td><%= vuln.product %></td>
-              <td><%= vuln.baseScore %></td>
-              <td><%= vuln.baseSeverity %></td>
-              <td><%= vuln.cwe %></td>
+              <td><%= vuln.Vendor %></td>
+              <td><%= vuln.Product %></td>
+              <td><%= vuln.BaseMetricV3.baseScore %></td>
+              <td><%= vuln.BaseMetricV3.baseSeverity %></td>
+              <td><%= vuln.ProblemType %></td>
               <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln.id %>"</td>
             </tr>
           <% }); %>

@@ -5,7 +5,16 @@ const cveSchema = new mongoose.Schema({
     Assigner : String,
     Date_updated : Date,
     Date_published : Date,
-    Description: String
+    Description: String,
+    Vendor: String,
+    BaseMetricV3: {
+        baseScore: Number,
+        baseSeverity: String
+    },
+    exploitabilityScore: Number,
+    impactScore: Number,
+    ProblemType: [String],
+    References: [String]
 });
 
 module.exports =  mongoose.model("cves", cveSchema);

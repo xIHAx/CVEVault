@@ -39,7 +39,7 @@
         <button class="btn btn-custom small">Save</button>
         <form id="remove" action="/remove-favourites" method="POST">
           <input type="hidden" name="selectedVulns" id="removeSelected">
-          <button id="removeBtn" class="btn btn-custom small btn-danger">Remove</button>
+          <button id="removeBtn" class="btn btn-custom small">Remove</button>
         </form>
       </div>
     </div>
@@ -67,7 +67,7 @@
             <% favourites.forEach(fav => { %>
               <tr>
                 <td><%= fav.CVE_ID %></td>
-                <td><%= fav.vendor %></td>
+                <td><%= fav.Vendor %></td>
                 <td><%= fav.product %></td>
                 <td><%= fav.baseScore %></td>
                 <td><%= fav.baseSeverity %></td>
