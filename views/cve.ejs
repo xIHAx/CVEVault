@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <!-- CVE Title -->
-    <h2 class="cve-title"><%= cve.id %></h2>
+    <h2 class="cve-title"><%= cve.CVE_ID %></h2>
 
     <!-- CVE Information Table -->
     <div class="cve-info">
@@ -20,27 +20,27 @@
       </div>
 
       <div class="cve-header-values">
-        <div class="cve-box"><%= cve.description || "No description available" %></div>
-        <div class="cve-box"><%= cve.product %></div>
-        <div class="cve-box"><%= cve.vendor %></div>
+        <div class="cve-box"><%= cve.Description || "No description available" %></div>
+        <div class="cve-box"><%= cve.Product %></div>
+        <div class="cve-box"><%= cve.Vendor %></div>
       </div>
     </div>
 
     <!-- CVE Scores Section -->
     <div class="cve-scores">
-      <div class="score-box"><strong>Base score</strong><br><span><%= cve.baseScore %></span></div>
-      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.baseSeverity %></span></div>
-      <div class="score-box"><strong>CVSS</strong><br><span>----</span></div>
-      <div class="score-box"><strong>Exploitability score</strong><br><span>000</span></div>
-      <div class="score-box"><strong>Impact score</strong><br><span>000</span></div>
+      <div class="score-box"><strong>Base score</strong><br><span><%= cve.BaseMetricV3.baseScore %></span></div>
+      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.BaseMetricV3.baseSeverity %></span></div>
+      <div class="score-box"><strong>CVSS</strong><br><span><%= cve.BaseMetricV3.vectorString %></span></div>
+      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.exploitabilityScore %></span></div>
+      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.impactScore %></span></div>
     </div>
 
     <!-- CWE and References Section -->
     <div class="cve-extra">
-      <div class="cwe-box"><strong>CWE-ID</strong><br><span><%= cve.cwe %></span></div>
+      <div class="cwe-box"><strong>CWE-ID</strong><br><span><%= cve.ProblemType %></span></div>
       <div class="reference-box">
         <strong>References</strong>
-        <p>Something here regarding the CVE and give links to the people who first found it</p>
+        <p><%= cve.References ></p>
       </div>
     </div>
 

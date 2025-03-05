@@ -8,6 +8,7 @@ const cveSchema = new mongoose.Schema({
     Description: String,
     Vendor: String,
     BaseMetricV3: {
+        vectorString: String,
         baseScore: Number,
         baseSeverity: String
     },
