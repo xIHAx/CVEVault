@@ -68,7 +68,7 @@
         <tbody>
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
-              <td><%= vuln.CVE_ID %></td>
+              <td><a href='/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
               <td><%= vuln.Vendor %></td>
               <td><%= vuln.Product %></td>
               <td><%= vuln.BaseMetricV3.baseScore %></td>

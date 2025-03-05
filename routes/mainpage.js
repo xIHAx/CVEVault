@@ -25,7 +25,7 @@ function filterDescription(desc, cwes) {
     const filteredCwe = cwes.map(cwe => 
         cwe === 'NVD-CWE-noinfo' ? '-' : cwe
     );
-    
+
     return {
         filterDesc,
         product,
@@ -106,16 +106,30 @@ router.get('/', async (req, res) => {
  * GET CVE Router |
  * Retrieves and sends data for the selected CVE
  */
-router.get('/cve:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
 
     try {
         // Retrieving CVE ID from URL
-        const cve_id = parseInt(req.params.id, 10);
-        const cvedata = await cveSchema.findById({ cve_id });
+        const cve_id = req.params.id;
+        const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
+        
+        // Filtering description
+        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType);
+
+        if (!filteredDesc) {
+            return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
+        }
+
+        const filteredCveDetails = {
+            ...cveDetails.toObject(),
+            Description: filteredDesc.filterDesc,
+            Product: filteredDesc.product,
+            ProblemType: filteredDesc.filteredCwe
+        }
 
         return res.render('cve',
             {
-                cvedata: cvedata
+                cve: filteredCveDetails
             }
         );
     } catch (error) {

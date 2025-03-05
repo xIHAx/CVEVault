@@ -31,8 +31,8 @@
       <div class="score-box"><strong>Base score</strong><br><span><%= cve.BaseMetricV3.baseScore %></span></div>
       <div class="score-box"><strong>Base severity</strong><br><span><%= cve.BaseMetricV3.baseSeverity %></span></div>
       <div class="score-box"><strong>CVSS</strong><br><span><%= cve.BaseMetricV3.vectorString %></span></div>
-      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.exploitabilityScore %></span></div>
-      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.impactScore %></span></div>
+      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.BaseMetricV3.exploitabilityScore %></span></div>
+      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.BaseMetricV3.impactScore %></span></div>
     </div>
 
     <!-- CWE and References Section -->
@@ -40,7 +40,7 @@
       <div class="cwe-box"><strong>CWE-ID</strong><br><span><%= cve.ProblemType %></span></div>
       <div class="reference-box">
         <strong>References</strong>
-        <p><%= cve.References ></p>
+        <p><%= cve.References %></p>
       </div>
     </div>
 
