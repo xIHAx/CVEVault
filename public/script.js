@@ -59,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-
 function convertButtonToSearch(button) {
     if (!button) return;
     
