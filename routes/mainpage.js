@@ -23,14 +23,16 @@ function filterDescription(desc, cwes, cpes) {
     const products = [];
     const vendorDupe = new Set();
 
-    // console.log(cpes);
-
     if (cpes && compareSync.length > 0) {
         cpes.forEach(cpe => {
             
             if(!vendorDupe.has(cpe.vendor)) {
                 vendorDupe.add(cpe.vendor);
                 vendors.push(cpe.vendor);
+            }
+
+            if(cpe.version === '-'){
+                cpe.version = '';
             }
 
             products.push(`${cpe.product} ${cpe.version}`);
@@ -117,7 +119,7 @@ router.get('/cve/:cve_id', async (req, res) => {
         const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
         
         // Filtering description
-        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType);
+        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
 
         if (!filteredDesc) {
             return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
@@ -126,7 +128,8 @@ router.get('/cve/:cve_id', async (req, res) => {
         const filteredCveDetails = {
             ...cveDetails.toObject(),
             Description: filteredDesc.filterDesc,
-            Product: filteredDesc.product,
+            Products: filteredDesc.products,
+            Vendors: filteredDesc.vendors,
             ProblemType: filteredDesc.filteredCwe
         }
 
