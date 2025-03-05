@@ -25,11 +25,12 @@ router.get('/favourites', async (req, res) => {
                                         const filteredCve = cve.toObject();
 
                                         // Filtering description
-                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType);
+                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
 
                                         if (filteredDesc) {
                                             filteredCve.Description = filteredDesc.filterDesc;
-                                            filteredCve.Product = filteredDesc.product;
+                                            filteredCve.Products = filteredDesc.products;
+                                            filteredCve.Vendors = filteredDesc.vendors;
                                             filteredCve.ProblemType = filteredDesc.filteredCwe;
                                             return filteredCve;
                                         }

@@ -6,7 +6,11 @@ const cveSchema = new mongoose.Schema({
     Date_updated : Date,
     Date_published : Date,
     Description: String,
-    Vendor: String,
+    CPE: [{
+        vendor: String,
+        product: String,
+        version: String,
+    }],
     BaseMetricV3: {
         vectorString: String,
         baseScore: Number,

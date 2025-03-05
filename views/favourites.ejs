@@ -72,8 +72,8 @@
             <% favourites.forEach(fav => { %>
               <tr>
                 <td><a href='/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
-                <td><%= fav.Vendor %></td>
-                <td><%= fav.Product %></td>
+                <td><%= fav.Vendors %></td>
+                <td><%= fav.Products %></td>
                 <td><%= fav.BaseMetricV3.baseScore %></td>
                 <td><%= fav.BaseMetricV3.baseSeverity %></td>
                 <td><%= fav.ProblemType %></td>
