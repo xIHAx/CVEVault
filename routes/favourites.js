@@ -35,21 +35,25 @@ router.get('/favourites', async (req, res) => {
  * POST Favourites Router |
  * Handles the adding to favourites for current user
  */
-router.post('/addfavourite:id', async (req, res) => {
+router.post('/add-favourites', async (req, res) => {
     try {
         const user_id = req.session.userid;
-        const cve_id = req.body.cveid;
+        const cve_ids = JSON.parse(req.body.selectedVulns || "[]");
 
         // Ensures the cve selected exists
-        const cveExists = await cveSchema.findById( cve_id );
+        const cveExists = await cveSchema.find({_id: { $in: cve_ids } });
 
-        if(!cveExists) {
-            return res.status(404).send('The cve being selected does not exist.');
+        // Debugging Code
+        //console.log('Cve_Ids', cve_ids.length);
+        //console.log('cevExists', cveExists.length);
+
+        if(cveExists.length !== cve_ids.length) {
+            return res.status(404).send('One or more CVEs selected does not exist.');
         }
 
         await userSchema.findByIdAndUpdate(
                 user_id,
-                { $addtoset: { favourites : cve_id }},
+                { $addToSet: { favourites : { $each: cve_ids } }},
                 { new: true }
         );
 
@@ -65,7 +69,7 @@ router.post('/addfavourite:id', async (req, res) => {
  * Handles the removal of favourites
  * from a user
  */
-router.post('/remove-favourite', async (req, res) => {
+router.post('/remove-favourites', async (req, res) => {
     try {
         const user_id = req.session.userid;
         const cve_id = req.body.cveId;

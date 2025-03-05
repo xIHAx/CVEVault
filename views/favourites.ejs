@@ -37,7 +37,10 @@
         <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
         <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
         <button class="btn btn-custom small">Save</button>
-        <button class="btn btn-custom small btn-danger">Remove</button>
+        <form id="remove" action="/remove-favourites" method="POST">
+          <input type="hidden" name="selectedVulns" id="removeSelected">
+          <button id="removeBtn" class="btn btn-custom small btn-danger">Remove</button>
+        </form>
       </div>
     </div>
 
@@ -52,7 +55,7 @@
             <th>Base Score</th>
             <th>Base Severity</th>
             <th>CWE</th>
-            <th>Action</th>
+            <th>Select</th>
           </tr>
         </thead>
         <tbody>
@@ -63,18 +66,13 @@
           <% } else { %>
             <% favourites.forEach(fav => { %>
               <tr>
-                <td><%= fav.id %></td>
+                <td><%= fav.CVE_ID %></td>
                 <td><%= fav.vendor %></td>
                 <td><%= fav.product %></td>
                 <td><%= fav.baseScore %></td>
                 <td><%= fav.baseSeverity %></td>
                 <td><%= fav.cwe %></td>
-                <td>
-                  <form action="/remove-favourite" method="POST" onsubmit="return confirm('Are you sure you want to remove this favourite?');">
-                    <input type="hidden" name="cveId" value="<%= fav.id %>">
-                    <button type="submit" class="btn btn-danger btn-sm">❌ Remove</button>
-                  </form>
-                </td>
+                <td><input type="checkbox" class="vuln-checkbox" value="<%= fav.id %>"</td>
               </tr>
             <% }); %>
           <% } %>

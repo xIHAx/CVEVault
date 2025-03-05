@@ -3,7 +3,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.target.classList.contains("search-btn")) {
             convertButtonToSearch(event.target);
         }
+
+        if (event.target.id === "saveBtn") {
+            alert("Are you sure you want to export the selected CVEs?");
+            handleAction("save", "saveSelected");
+        }
+
+        if (event.target.id === "addFavBtn") {
+            alert("Are you sure you want to add the selected CVEs to favourites?");
+            handleAction("favourite", "favSelected");
+        }
+
+        if (event.target.id === "removeBtn") {
+            alert("Are you sure you want to remove the selected CVEs?");
+            handleAction("remove", "removeSelected");
+        }
     });
+
 });
 
 function convertButtonToSearch(button) {
@@ -49,4 +65,21 @@ function restoreButton(input) {
     button.innerText = input.dataset.originalText; // Restore original button text
     
     parent.replaceChild(button, input);
+}
+
+function handleAction(formid, inputid) {
+    const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value)
+
+    if (selectedVulns.length === 0) {
+        alert("Please select at least 1 CVE");
+        return;
+    }
+
+    // Set input to selected cves
+    document.getElementById(inputid).value = JSON.stringify(selectedVulns);
+
+    // Submitting the form of the button
+    document.getElementById(formid).submit();
 }
