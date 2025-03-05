@@ -23,13 +23,13 @@
       <!-- Left Side Buttons -->
       <div class="left-buttons">
         <button class="btn btn-custom" onclick="window.location.href='/'">Main</button>
-        <button id="cveSearchBtn" class="search-btn btn btn-custom">CVE ID Search</button>
+        <button id="cveBtn" class="search-btn btn btn-custom">CVE ID Search</button>
       </div>
 
       <!-- Center Buttons -->
       <div class="center-buttons">
-        <button id="vendorSearchBtn" class="search-btn btn btn-custom">Vendor Search</button>
-        <button id="productSearchBtn" class="search-btn btn btn-custom">Product Search</button>
+        <button id="vendorBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productBtn" class="search-btn btn btn-custom">Product Search</button>
       </div>
 
       <!-- Right Side Buttons -->
@@ -71,12 +71,12 @@
           <% } else { %>
             <% favourites.forEach(fav => { %>
               <tr>
-                <td><%= fav.CVE_ID %></td>
+                <td><a href='/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
                 <td><%= fav.Vendor %></td>
-                <td><%= fav.product %></td>
-                <td><%= fav.baseScore %></td>
-                <td><%= fav.baseSeverity %></td>
-                <td><%= fav.cwe %></td>
+                <td><%= fav.Product %></td>
+                <td><%= fav.BaseMetricV3.baseScore %></td>
+                <td><%= fav.BaseMetricV3.baseSeverity %></td>
+                <td><%= fav.ProblemType %></td>
                 <td><input type="checkbox" class="vuln-checkbox" value="<%= fav._id %>"</td>
               </tr>
             <% }); %>

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (event.target.id === "exportBtn") {
-            alert("Are you sure you want to export the selected CVEs?");
+            confirm("Are you sure you want to export the selected CVEs?");
             handleAction("export", "exportSelected");
         }
 
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (event.target.id === "removeBtn") {
-            alert("Are you sure you want to remove the selected CVEs?");
+            confirm("Are you sure you want to remove the selected CVEs?");
             handleAction("remove", "removeSelected");
         }
     });
@@ -82,4 +82,39 @@ function handleAction(formid, inputid) {
 
     // Submitting the form of the button
     document.getElementById(formid).submit();
+}
+
+function filterTable(inputId) {
+    const input = document.getElementById(inputId);
+    const searchTerm = input.value.toLowerCase().trim();
+   
+    const table = document.getElementById('mainTable') ||
+                  document.getElementById('favouritesTable');
+    const rows = table.querySelectorAll('tbody tr');
+
+    // If search term is empty, show all rows
+    if (searchTerm === '') {
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+        return;
+    }
+
+    rows.forEach(row => {
+        let shouldShow = false;
+        switch(inputId) {
+            case 'cveSearch':
+                filteredRows = row.cells[0].textContent.toLowerCase().includes(searchTerm);
+                break;
+            case 'vendorSearch':
+                // More flexible search for vendor
+                filteredRows = row.cells[1].textContent.toLowerCase().includes(searchTerm);
+                break;
+            case 'productSearch':
+                // More flexible search for product
+                filteredRows = row.cells[2].textContent.toLowerCase().includes(searchTerm);
+                break;
+        }
+        row.style.display = filteredRows ? '' : 'none';
+    });
 }

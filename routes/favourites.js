@@ -4,6 +4,7 @@ const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
 const { isLoggedIn } = require('./login');
+const { filterDescription } = require('./mainpage');
 
 // Ensure the routers can only be accessed on login
 router.use(isLoggedIn);
@@ -16,13 +17,31 @@ router.get('/favourites', async (req, res) => {
     try {
         const user = await userSchema.findById(req.session.userid);
         const cveDetails = await cveSchema.find({ _id: { $in: user.favourites }});
-
         const username = user.username;
+
+        const filteredCveDetails = cveDetails
+                                    .map(cve => {
+                                        // Assigning original cve details to protect original data
+                                        const filteredCve = cve.toObject();
+
+                                        // Filtering description
+                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType);
+
+                                        if (filteredDesc) {
+                                            filteredCve.Description = filteredDesc.filterDesc;
+                                            filteredCve.Product = filteredDesc.product;
+                                            filteredCve.ProblemType = filteredDesc.filteredCwe;
+                                            return filteredCve;
+                                        }
+
+                                        return null;
+                                    })
+                                    .filter(Boolean);
 
         return res.render('favourites',
             {
                 username: username,
-                favourites: cveDetails
+                favourites: filteredCveDetails
             }
         );
     } catch (error) {

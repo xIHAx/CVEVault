@@ -23,13 +23,13 @@
       <!-- Left Side Buttons -->
       <div class="left-buttons">
         <button class="btn btn-custom" onclick="window.location.href='/favourites'">Favourites</button>
-        <button id="cveSearchBtn" class="search-btn btn btn-custom">CVE ID Search</button>
+        <button id="cveBtn" class="search-btn btn btn-custom">CVE ID Search</button>
       </div>
 
       <!-- Center Buttons -->
       <div class="center-buttons">
-        <button id="vendorSearchBtn" class="search-btn btn btn-custom">Vendor Search</button>
-        <button id="productSearchBtn" class="search-btn btn btn-custom">Product Search</button>
+        <button id="vendorBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productBtn" class="search-btn btn btn-custom">Product Search</button>
       </div>
 
       <!-- Right Side Buttons -->
@@ -71,13 +71,13 @@
         <tbody>
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
-              <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
-              <td><%= vuln.Vendor %></td>
-              <td><%= vuln.Product %></td>
+              <td data-type="cve"><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
+              <td data-type="vendor"><%= vuln.Vendor %></td>
+              <td data-type="product"><%= vuln.Product %></td>
               <td><%= vuln.BaseMetricV3.baseScore %></td>
               <td><%= vuln.BaseMetricV3.baseSeverity %></td>
               <td><%= vuln.ProblemType %></td>
-              <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"</td>
+              <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
             </tr>
           <% }); %>
         </tbody>

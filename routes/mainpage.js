@@ -23,7 +23,7 @@ function filterDescription(desc, cwes) {
     let filterDesc = desc.replace(/Product:\s*.*/, '').trim();
 
     const filteredCwe = cwes.map(cwe => 
-        cwe === 'NVD-CWE-noinfo' ? '-' : cwe
+        cwe === 'NVD-CWE-noinfo' || cwe === 'NVD-CWE-Other' ? '-' : cwe
     );
 
     return {
@@ -127,7 +127,4 @@ router.get('/cve/:cve_id', async (req, res) => {
     }
 });
 
-
-
-
-module.exports = router;
+module.exports = { router, filterDescription };
