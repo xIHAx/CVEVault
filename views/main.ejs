@@ -23,21 +23,34 @@
       <!-- Left Side Buttons -->
       <div class="left-buttons">
         <button class="btn btn-custom" onclick="window.location.href='/favourites'">Favourites</button>
-        <button id="cveSearchBtn" class="search-btn btn btn-custom">CVE ID Search</button>
+        <button id="cveBtn" class="search-btn btn btn-custom">CVE ID Search</button>
       </div>
 
       <!-- Center Buttons -->
       <div class="center-buttons">
-        <button id="vendorSearchBtn" class="search-btn btn btn-custom">Vendor Search</button>
-        <button id="productSearchBtn" class="search-btn btn btn-custom">Product Search</button>
+        <button id="vendorBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productBtn" class="search-btn btn btn-custom">Product Search</button>
       </div>
 
       <!-- Right Side Buttons -->
       <div class="right-buttons">
-        <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
-        <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
-        <button class="btn btn-custom small">Save</button>
-        <button class="btn btn-custom small">Favourite</button>
+        <% if (username) { %>
+          <button class="btn btn-custom small"><%= username %></button>
+          <form id="logout" action="/logout" method="get">
+            <button type="submit" class="btn btn-custom small">Logout</button>
+          </form>
+        <% } else { %>
+          <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
+          <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
+        <% } %>
+        <form id="export" action="/export-cves" method="POST">
+          <input type="hidden" name="selectedVulns" id="exportSelected">
+          <button id="exportBtn" class="btn btn-custom small">Export</button>
+        </form>
+        <form id="favourite" action="/add-favourites" method="POST">
+          <input type="hidden" name="selectedVulns" id="favSelected">
+          <button id="addFavBtn" class="btn btn-custom small">Favourite</button>
+        </form>
       </div>
     </div>
 
@@ -52,17 +65,19 @@
             <th>Base Score</th>
             <th>Base Severity</th>
             <th>CWE</th>
+            <th>Select</th>
           </tr>
         </thead>
         <tbody>
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
-              <td><%= vuln.id %></td>
-              <td><%= vuln.vendor %></td>
-              <td><%= vuln.product %></td>
-              <td><%= vuln.baseScore %></td>
-              <td><%= vuln.baseSeverity %></td>
-              <td><%= vuln.cwe %></td>
+              <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
+              <td><%= vuln.Vendors %></td>
+              <td><%= vuln.Products %></td>
+              <td><%= vuln.BaseMetricV3.baseScore %></td>
+              <td><%= vuln.BaseMetricV3.baseSeverity %></td>
+              <td><%= vuln.ProblemType %></td>
+              <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
             </tr>
           <% }); %>
         </tbody>

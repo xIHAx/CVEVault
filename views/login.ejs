@@ -33,6 +33,15 @@
           <input type="password" id="password" class="form-control text-center login-input" placeholder="Enter your password" name="password" autocomplete="current-password" required>
         </div>
 
+        <!-- Error Messages -->
+        <div class="d-flex justify-content-center gap-3 mb-3">
+            <% if (error) {%>
+              <div class="login-error-message">
+                <%= error %>
+              </div>
+            <% } %>
+        </div>
+
         <!-- Sign in Button -->
         <button type="submit" class="btn btn-dark w-100 login-btn">Sign in</button>
       </form>

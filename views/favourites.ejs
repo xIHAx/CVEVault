@@ -23,21 +23,29 @@
       <!-- Left Side Buttons -->
       <div class="left-buttons">
         <button class="btn btn-custom" onclick="window.location.href='/'">Main</button>
-        <button id="cveSearchBtn" class="search-btn btn btn-custom">CVE ID Search</button>
+        <button id="cveBtn" class="search-btn btn btn-custom">CVE ID Search</button>
       </div>
 
       <!-- Center Buttons -->
       <div class="center-buttons">
-        <button id="vendorSearchBtn" class="search-btn btn btn-custom">Vendor Search</button>
-        <button id="productSearchBtn" class="search-btn btn btn-custom">Product Search</button>
+        <button id="vendorBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productBtn" class="search-btn btn btn-custom">Product Search</button>
       </div>
 
       <!-- Right Side Buttons -->
       <div class="right-buttons">
-        <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
-        <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
-        <button class="btn btn-custom small">Save</button>
-        <button class="btn btn-custom small btn-danger">Remove</button>
+        <button class="btn btn-custom small"><%= username %></button>
+        <form id="logout" action="/logout" method="get">
+            <button type="submit" class="btn btn-custom small">Logout</button>
+        </form>
+        <form id="export" action="/export-cves" method="POST">
+          <input type="hidden" name="selectedVulns" id="exportSelected">
+          <button id="exportBtn" class="btn btn-custom small">Export</button>
+        </form>
+        <form id="remove" action="/remove-favourites" method="POST">
+          <input type="hidden" name="selectedVulns" id="removeSelected">
+          <button id="removeBtn" class="btn btn-custom small">Remove</button>
+        </form>
       </div>
     </div>
 
@@ -52,7 +60,7 @@
             <th>Base Score</th>
             <th>Base Severity</th>
             <th>CWE</th>
-            <th>Action</th>
+            <th>Select</th>
           </tr>
         </thead>
         <tbody>
@@ -63,18 +71,13 @@
           <% } else { %>
             <% favourites.forEach(fav => { %>
               <tr>
-                <td><%= fav.id %></td>
-                <td><%= fav.vendor %></td>
-                <td><%= fav.product %></td>
-                <td><%= fav.baseScore %></td>
-                <td><%= fav.baseSeverity %></td>
-                <td><%= fav.cwe %></td>
-                <td>
-                  <form action="/remove-favourite" method="POST" onsubmit="return confirm('Are you sure you want to remove this favourite?');">
-                    <input type="hidden" name="cveId" value="<%= fav.id %>">
-                    <button type="submit" class="btn btn-danger btn-sm">❌ Remove</button>
-                  </form>
-                </td>
+                <td><a href='/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
+                <td><%= fav.Vendors %></td>
+                <td><%= fav.Products %></td>
+                <td><%= fav.BaseMetricV3.baseScore %></td>
+                <td><%= fav.BaseMetricV3.baseSeverity %></td>
+                <td><%= fav.ProblemType %></td>
+                <td><input type="checkbox" class="vuln-checkbox" value="<%= fav._id %>"</td>
               </tr>
             <% }); %>
           <% } %>

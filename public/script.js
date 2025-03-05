@@ -3,7 +3,23 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.target.classList.contains("search-btn")) {
             convertButtonToSearch(event.target);
         }
+
+        if (event.target.id === "exportBtn") {
+            confirm("Are you sure you want to export the selected CVEs?");
+            handleAction("export", "exportSelected");
+        }
+
+        if (event.target.id === "addFavBtn") {
+            confirm("Are you sure you want to add the selected CVEs to favourites?");
+            handleAction("favourite", "favSelected");
+        }
+
+        if (event.target.id === "removeBtn") {
+            confirm("Are you sure you want to remove the selected CVEs?");
+            handleAction("remove", "removeSelected");
+        }
     });
+
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -86,4 +102,56 @@ function restoreButton(input) {
     button.innerText = input.dataset.originalText; // Restore original button text
     
     parent.replaceChild(button, input);
+}
+
+function handleAction(formid, inputid) {
+    const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
+        .filter(checkbox => checkbox.checked)
+        .map(checkbox => checkbox.value)
+
+    if (selectedVulns.length === 0) {
+        alert("Please select at least 1 CVE");
+        return;
+    }
+
+    // Set input to selected cves
+    document.getElementById(inputid).value = JSON.stringify(selectedVulns);
+
+    // Submitting the form of the button
+    document.getElementById(formid).submit();
+}
+
+function filterTable(inputId) {
+    const input = document.getElementById(inputId);
+    const searchTerm = input.value.toLowerCase().trim();
+   
+    const table = document.getElementById('mainTable') ||
+                  document.getElementById('favouritesTable');
+    const rows = table.querySelectorAll('tbody tr');
+
+    // If search term is empty, show all rows
+    if (searchTerm === '') {
+        rows.forEach(row => {
+            row.style.display = '';
+        });
+        return;
+    }
+
+    rows.forEach(row => {
+        let shouldShow = false;
+        switch(inputId) {
+            case 'cveSearch':
+                filteredRows = row.cells[0].textContent.toLowerCase().includes(searchTerm);
+                break;
+            case 'vendorSearch':
+                // More flexible search for vendor
+                filteredRows = row.cells[1].textContent.toLowerCase().includes(searchTerm);
+                break;
+            case 'productSearch':
+                // More flexible search for product
+                filteredRows = row.cells[2].textContent.toLowerCase().includes(searchTerm);
+                break;
+        }
+        row.style.display = filteredRows ? '' : 'none';
+    });
 }

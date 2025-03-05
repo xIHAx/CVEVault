@@ -1,16 +1,16 @@
-/** Authentication Related Routes */
+/** Login Related Routes */
 
 const express = require('express');
-const { body, validationResult } =  require('express-validator');
+const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const userSchema = require('../schema/user');
 
 // Router object for route handling
 const router = express.Router();
 
 /** 
  * isLoggedIn Function | 
- * Checks if user is logged in
- * Used for favourite function
+ * Checks if user is logged in for routers
  */
 function isLoggedIn(req, res, next) {
     if (req.session && req.session.userid) {
@@ -28,12 +28,12 @@ router.get('/login', (req, res) => {
         // Checks for logged in user
         if (req.session && req.session.userid){
             // Redirects user if logged in
-            return res.redirect('/mainpage');
+            return res.redirect('/');
         } else {
             // Renders login page if not logged in
             return res.render('login', 
                 {
-                    errors: []
+                    error: null
                 }
             );
         }
@@ -46,16 +46,15 @@ router.get('/login', (req, res) => {
  * POST Login Route | 
  * Handles the login for users
  */
-router.post('/login',
-    [
-        // SERVER SIDE VALIDATION HERE
-    ], 
+router.post('/login', 
     async (req, res) => {
         
         try {
-            const errors = validationResult(req);
-
             // Passing server side validation errors back
+            // Uncomment if used
+            /**
+            const errors = validationResult(req);
+            
             if(!errors.isEmpty()){
                 return res.render('login',
                     {
@@ -63,34 +62,43 @@ router.post('/login',
                     }
                 );
             }
+            */
 
             // Comparing if user exists in database
-            const userCheck = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+            const userCheck = await userSchema.findOne({ username: req.body.username });
 
             // If user does not exist inform user
             if(!userCheck){
                 return res.render('login',
                     {
-                        errors: [{ msg: 'Invalid username or password'}]
+                        error: 'Invalid username or password'
                     }
                 );
+
+                // Debugging Code
+                // return res.status(500).send('wrong user');
             }
 
             // Comparing if password is correct
-            const passwordCheck = await bcrypt.compare(password, userCheck.password);
+            const passwordCheck = await bcrypt.compare(req.body.password, userCheck.password);
 
             if(!passwordCheck){
                 return res.render('login',
                     {
-                        errors: [{ msg: 'Invalid username or password'}]
+                        error: 'Invalid username or password'
                     }
                 );
+                
+
+                // Debugging Code
+                // return res.status(500).send('wrong pass');
             }
 
             // Store user id in session
             req.session.userid = userCheck._id;
-            return res.redirect('/mainpage');
+            return res.redirect('/');
         } catch (error) {
+            console.log(error);
             return res.status(500).send('Error encountered submitting details');
         }
 });
@@ -100,10 +108,14 @@ router.post('/login',
  * Handles the destroying of session
  */
 router.get('/logout', (req, res) => {
-    // Destroying session and routing user to login page
-    req.session.destroy(() => {
-        return res.redirect('/login');
-    });
+    try{
+        // Destroying session and routing user to login page
+        req.session.destroy(() => {
+            return res.redirect('/');
+        });
+    } catch (error) {
+        return res.status(500).send('An error occured logging out. Please try again.');
+    }
 });
 
 module.exports = { router, isLoggedIn };

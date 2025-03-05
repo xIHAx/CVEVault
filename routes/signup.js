@@ -1,7 +1,9 @@
-// Importing Express, Express Validator and Bcrypt
+/** Sign Up Relayted Routes */
+
 const express = require("express");
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
+const userSchema = require('../schema/user');
 
 // Router object for route handling
 const router = express.Router();
@@ -14,13 +16,14 @@ router.get('/signup', (req, res) => {
     try{
         // Checks for logged in user
         if(req.session && req.session.userid){
-            return res.render('mainpage');
+            return res.redirect('/');
         }
 
         // Renders the sign up page if no logged in user
         return res.render('signup',
             {
-                errors: []
+                emailError: null,
+                nameError: null
             }
         );
     } catch (error) {
@@ -33,29 +36,42 @@ router.get('/signup', (req, res) => {
  * Handles the submission of registration
  */
 router.post('/signup', 
-    [
-        // SERVER SIDE VALIDATION
-    ],
     async (req, res) => {
         try{
-            const errors = validationResult(req);
-
             // Passing server side validation errors back
+            // Uncomment if using
+            /**
+            const errors = validationResult(req);
+            
             if(!errors.isEmpty()){
                 return res.render('signup',
                     {
                         errors: errors.array()
                     }
                 );
-            }
+            }*/
 
             // Existing User Check
-            const userExist = await SCHEMAPLACEHOLDER.findOne({ username: req.body.username });
+            const userExist = await userSchema.findOne({ username: req.body.username });
+            // Existing Email Check
+            const emailExist = await userSchema.findOne({ email: req.body.email });
+
+            let emailError = null;
+            let userError = null;
 
             if(userExist){
-                return res.render('signup', 
+                userError = 'Username already taken.'    
+            }
+
+            if(emailExist){
+                emailError = 'Email already used.'
+            }
+
+            if(userExist || emailExist) {
+                return res.render('signup',
                     {
-                        errors: [{ msg: 'Username already exists'}]
+                        emailError: emailError,
+                        nameError: userError
                     }
                 );
             }
@@ -63,9 +79,11 @@ router.post('/signup',
             // Hashing password provided
             const hashedPass = await bcrypt.hash(req.body.password, 10);
 
-            const newUser = new SCHEMA({
+            const newUser = new userSchema({
                 username: req.body.username,
-                password: hashedPass
+                password: hashedPass,
+                email: req.body.email,
+                dateCreated: Date.now() 
             });
 
             await newUser.save();

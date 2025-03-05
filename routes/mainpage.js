@@ -1,8 +1,51 @@
-// Placeholder items | Nothing here is set in stone to be updated and further adjusted
-
 const express = require("express");
 const router = express.Router();
 const cveSchema = require('../schema/cve');
+const userSchema = require('../schema/user');
+const { compareSync } = require("bcrypt");
+
+/** 
+ * Function for the cleaning of descriptions
+ */
+function filterDescription(desc, cwes, cpes) {
+
+    if (desc.includes('Rejected reason:')) {
+        return null;
+    }
+
+    let filterDesc = desc.replace(/Product:\s*.*/, '').trim();
+
+    const filteredCwe = cwes.map(cwe => 
+        cwe === 'NVD-CWE-noinfo' || cwe === 'NVD-CWE-Other' ? '-' : cwe
+    );
+
+    const vendors = [];
+    const products = [];
+    const vendorDupe = new Set();
+
+    if (cpes && compareSync.length > 0) {
+        cpes.forEach(cpe => {
+            
+            if(!vendorDupe.has(cpe.vendor)) {
+                vendorDupe.add(cpe.vendor);
+                vendors.push(cpe.vendor);
+            }
+
+            if(cpe.version === '-'){
+                cpe.version = '';
+            }
+
+            products.push(`${cpe.product} ${cpe.version}`);
+        });
+    }
+
+    return {
+        filterDesc,
+        filteredCwe,
+        products,
+        vendors
+    }
+}
 
 /**
  * GET Main Page Router |
@@ -10,138 +53,89 @@ const cveSchema = require('../schema/cve');
  */
 router.get('/', async (req, res) => {
     try {
-        /**
-            const vendorSearch = req.params.vendor ? req.params.vendor.trim() : "";
-            const cveidSearch = req.params.cve_id ? req.params.cve_id.trim() : "";
-            const productSearch = req.params.product ? req.params.product.trim() : "";
-
-            if (vendorSearch) {
-                
-            }
-        **/
-
         // Retrieves all cve data in the database
         const cveDetails = await cveSchema.find({});
 
+        const filteredCveDetails = cveDetails
+                                    .map(cve => {
+                                        // Assigning original cve details to protect original data
+                                        const filteredCve = cve.toObject();
+
+                                        // Filtering description
+                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
+
+                                        if (filteredDesc) {
+                                            filteredCve.Description = filteredDesc.filterDesc;
+                                            filteredCve.Products = filteredDesc.products;
+                                            filteredCve.Vendors = filteredDesc.vendors;
+                                            filteredCve.ProblemType = filteredDesc.filteredCwe;
+                                            return filteredCve;
+                                        }
+
+                                        return null;
+                                    })
+                                    .filter(Boolean);
+
+        let username = "";
+
+        // Retrieving username if user logged in
+        if(req.session && req.session.userid) {
+            // Retrieving username from database
+            const user = await userSchema.findById(req.session.userid).select('username');
+        
+            // Setting username retrieved as username variable
+            if(user) {
+                username = user.username;
+            } else {
+                return res.status(500).send('Error: User logged in does not have a username.');
+            }
+        }
+
         /** Debugging for cve retrieval */
-        // console.log(cveDetails);
+        // console.log(filteredCveDetails);
         
         // Sending the cve data to the ejs
-        return res.render('mainpage',
+        return res.render('main',
             {
-                vulnerabilities: cveDetails
+                vulnerabilities: filteredCveDetails,
+                username: username
             }
         );
     } catch (error) {
+        console.log(error);
         return res.status(500).send('An error encountered when retrieving the main page. Please try again.');
     }
 });
-
-/** 
- * GET Favourites Router |
- * Retrieves the favourites for current user
- */
-router.get('/favourites', async (req, res) => {
-    try {
-        if (req.session && req.session.userid ) {
-            const user = await userSchema.findById(req.session.userid);
-            const cveDetails = await cveSchema.find({ cveid: { $in: user.favourites }});
-
-            return res.render('favourites',
-                {
-                    favourites: cveDetails
-                }
-            );
-        }
-
-        return res.render('login');
-    } catch (error) {
-        return res.status(500).send('An error occured fetching the favourites page. Please try again.');
-    }
-});
-
-/**
- * POST Favourites Router |
- * Handles the adding to favourites for current user
- */
-router.post('/addfavourite:id', async (req, res) => {
-    try {
-        if (req.session && req.session.userid ) {
-            const user_id = req.session.userid;
-            const {cve_id} = req.body.cveid;
-
-            // Ensures the cve selected exists
-            const cveExists = await cveSchema.findById({ cve_id });
-
-            if(!cveExists) {
-                return res.status(404).send('The cve being selected does not exist.');
-            }
-
-            await userSchema.findByIdAndUpdate(
-                    user_id,
-                    { $addtoset: { favourites : cve_id }},
-                    { new: true }
-            );
-
-            return res.redirect('/favourites');
-        }
-
-        return res.render('login');
-    } catch (error) {
-        return res.status(500).send('An error occured adding to favourites. Please try again.');
-    }
-});
-
-/**
- * POST Remove-Favourites Router |
- * Handles the removal of favourites
- * from a user
- */
-router.post('/remove-favourite', async (req, res) => {
-    try {
-        if (req.session && req.session.userid ) {
-            const user_id = req.session.userid;
-            const {cve_id} = req.body.cveid;
-
-            // Ensures the cve selected exists
-            const cveExists = await cveSchema.findById({ cve_id });
-
-            if(!cveExists) {
-                return res.status(404).send('The cve being selected does not exist.');
-            }
-
-            await userSchema.findByIdAndUpdate(
-                    user_id,
-                    { $pull: { favourites : cve_id }},
-                    { new: true }
-            );
-
-            return res.redirect('/favourites');
-        }
-
-        return res.render('login');
-
-
-    } catch (error) {
-        return res.status(500).send('An error occured removing from favourites. Please try again.');
-    }
-});
-
 
 /**
  * GET CVE Router |
  * Retrieves and sends data for the selected CVE
  */
-router.get('/cve:id', async (req, res) => {
+router.get('/cve/:cve_id', async (req, res) => {
 
     try {
         // Retrieving CVE ID from URL
-        const cve_id = parseInt(req.params.id, 10);
-        const cvedata = await cveSchema.findById({ cve_id });
+        const cve_id = req.params.cve_id;
+        const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
+        
+        // Filtering description
+        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
+
+        if (!filteredDesc) {
+            return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
+        }
+
+        const filteredCveDetails = {
+            ...cveDetails.toObject(),
+            Description: filteredDesc.filterDesc,
+            Products: filteredDesc.products,
+            Vendors: filteredDesc.vendors,
+            ProblemType: filteredDesc.filteredCwe
+        }
 
         return res.render('cve',
             {
-                cvedata: cvedata
+                cve: filteredCveDetails
             }
         );
     } catch (error) {
@@ -149,5 +143,16 @@ router.get('/cve:id', async (req, res) => {
     }
 });
 
+/**
+ * Export CSV POST Router |
+ */
+router.post('/export-cve', async (req, res) => {
+    try {
+        const cve_ids = JSON.parse(req.body.selectedVulns || "[]");
 
-module.exports = router;
+    } catch (error) {
+        return res.status(500).send('An error occured posting the export. Please try again');
+    }
+});
+
+module.exports = { router, filterDescription };

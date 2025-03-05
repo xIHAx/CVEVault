@@ -279,3 +279,33 @@ th {
   border-radius: 5px;
   overflow: hidden;
 }
+
+/* Sign Up Errors */
+.signup-error-container {
+    display: flex;
+    align-items: center;
+}
+.signup-error-message {
+  color: red;
+  font-size: 0.85rem;
+  height: 1.5rem;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+.signup-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Login Error */
+.login-error-message {
+  color: red;
+  text-align: center;
+  width: 100%;
+}
