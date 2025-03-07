@@ -285,6 +285,7 @@ th {
     display: flex;
     align-items: center;
 }
+
 .signup-error-message {
   color: #b02a37;
   font-size: 0.85rem;
@@ -296,6 +297,7 @@ th {
   text-align: center;
   width: 100%;
 }
+
 .signup-input-wrapper {
     position: relative;
     display: flex;
@@ -310,7 +312,7 @@ th {
   width: 100%;
 }
 
-/* Error Messages */
+/* Error Messages Overwrite */
 .text-danger {
   color: #b02a37 !important;
 }

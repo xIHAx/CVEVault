@@ -113,10 +113,16 @@ function restoreButton(input) {
     parent.replaceChild(button, input);
 }
 
+/**
+ * checkboxStatus Function |
+ * Function to check if there are any checkbox selected
+ */
 function checkboxStatus(){
+    // Retrieves selected vulnerabilties
     const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
         .filter(checkbox => checkbox.checked);
 
+    // If no selected vulnerabilities alert the user and return false
     if(selectedVulns.length === 0){
         alert("Please select at least 1 CVE");
         return false;
@@ -124,7 +130,12 @@ function checkboxStatus(){
     return true;
 }
 
+/**
+ * handleAction Function |
+ * Handling the submission of forms and input of specific buttons
+ */
 function handleAction(formid, inputid) {
+    // Retrieves selected vulnerabilities
     const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
         .filter(checkbox => checkbox.checked)
         .map(checkbox => checkbox.value);
@@ -137,15 +148,23 @@ function handleAction(formid, inputid) {
     
 }
 
+/**
+ * filterTable 
+ */
 function filterTable(inputId) {
+
+    // Set variables to follow the field being inputted
     const input = document.getElementById(inputId);
     const searchTerm = input.value.toLowerCase().trim();
    
+    // Set table variable to be either the main page table or favourites table
     const table = document.getElementById('mainTable') ||
                   document.getElementById('favouritesTable');
+
+    // Setting the rows of the table
     const rows = table.querySelectorAll('tbody tr');
 
-    // If search term is empty, show all rows
+    // Display all rows if the seach term is empty
     if (searchTerm === '') {
         rows.forEach(row => {
             row.style.display = '';
@@ -153,7 +172,9 @@ function filterTable(inputId) {
         return;
     }
 
+    // Looping through each row for the search term
     rows.forEach(row => {
+        // Filters the rows based on the search parameter used
         switch(inputId) {
             case 'cveSearch':
                 filteredRows = row.cells[0].textContent.toLowerCase().includes(searchTerm);
@@ -167,6 +188,7 @@ function filterTable(inputId) {
                 filteredRows = row.cells[2].textContent.toLowerCase().includes(searchTerm);
                 break;
         }
+        // Displays the filtered rows
         row.style.display = filteredRows ? '' : 'none';
     });
 }

@@ -44,7 +44,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
-        maxAge: 24 * 60 * 60 // Cookies expire in a day
+        // Set Cookies to expire in a day
+        maxAge: 24 * 60 * 60 
     }
 }));
 

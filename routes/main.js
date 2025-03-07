@@ -1,12 +1,19 @@
+/**
+ * main.js |
+ * Contains the routes for main page, cve page
+ * and export to csv
+ */
+
+// Imported the required files and functions
 const express = require("express");
 const fs = require('fs');
 const path = require('path');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const { filterCveContent } = require('../utils/utils.js')
-
-const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
+
+const router = express.Router();
 
 /**
  * GET Main Page Router |
@@ -17,14 +24,16 @@ router.get('/', async (req, res) => {
         // Retrieves all cve data in the database
         const cveDetails = await cveSchema.find({});
 
+        // Filtering CVE Details for page display
         const filteredCveDetails = cveDetails
                                     .map(cve => {
                                         // Assigning original cve details to protect original data
                                         const filteredCve = cve.toObject();
 
-                                        // Filtering description
+                                        // Using the filter function
                                         const filteredCveResults = filterCveContent(cve.Description, cve.ProblemType, cve.CPE);
 
+                                        // Reassigning filtered variables to the copied data
                                         if (filteredCveResults) {
                                             filteredCve.Description = filteredCveResults.filterDesc;
                                             filteredCve.Products = filteredCveResults.products;
@@ -35,6 +44,7 @@ router.get('/', async (req, res) => {
 
                                         return null;
                                     })
+                                    // Remove the rejected (null) CVEs
                                     .filter(Boolean);
 
         let username = "";
@@ -52,10 +62,10 @@ router.get('/', async (req, res) => {
             }
         }
 
-        /** Debugging for cve retrieval */
+        // Debugging code for cve retrieval
         // console.log(filteredCveDetails);
         
-        // Sending the cve data to the ejs
+        // Sending the cve data to the ejs & rendering the main page
         return res.render('main',
             {
                 vulnerabilities: filteredCveDetails,
@@ -63,7 +73,8 @@ router.get('/', async (req, res) => {
             }
         );
     } catch (error) {
-        console.log(error);
+        // Debugging code
+        // console.log(error);
         return res.status(500).send('An error encountered when retrieving the main page. Please try again.');
     }
 });
@@ -77,15 +88,19 @@ router.get(['/cve/:cve_id', '/favourites/cve/:cve_id'], async (req, res) => {
     try {
         // Retrieving CVE ID from URL
         const cve_id = req.params.cve_id;
+
+        // Retrieving CVE data from database
         const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
         
-        // Filtering description
+        // Filtering CVE Content
         const filteredCveResults = filterCveContent(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
 
+        // If false/null response return rejected CVE error
         if (!filteredCveResults) {
             return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
         }
 
+        // Setting the filtered CVE details
         const filteredCveDetails = {
             ...cveDetails.toObject(),
             Description: filteredCveResults.filterDesc,
@@ -94,21 +109,26 @@ router.get(['/cve/:cve_id', '/favourites/cve/:cve_id'], async (req, res) => {
             ProblemType: filteredCveResults.filteredCwe
         }
 
+        // Render the cve page with the cve information
         return res.render('cve',
             {
                 cve: filteredCveDetails
             }
         );
     } catch (error) {
+        // Debugging code
+        // console.log(error);
         return res.status(500).send('An error occured fetching the CVE page. Please try again');
     }
 });
 
 /**
  * Export CSV POST Router |
+ * Handles the exporting of cve data to csv
  */
 router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
     try {
+        // Retrieving the id of selected vulnerabilities
         const cve_ids = JSON.parse(req.body.selectedVulns || "[]");
 
         // Ensure the cve select exists
@@ -141,9 +161,10 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
                 // Assigning original cve details to protect original data
                 const filteredCve = cve.toObject();
 
-                // Filtering description
+                // Using filter function
                 const filteredDesc = filterCveContent(cve.Description, cve.ProblemType, cve.CPE);
 
+                // Reassigning the filtered variables to the copied data
                 if (filteredDesc) {
                     filteredCve.Description = filteredDesc.filterDesc;
                     filteredCve.Products = filteredDesc.products;
@@ -154,8 +175,10 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
 
                 return null;
             })
+            // Remove the rejected (null) CVEs
             .filter(Boolean);
 
+            // Looping and specifyig the CVE Data to be exported
             const csvData = filteredCveDetails.map(cve => ({
                 cve_id: cve.CVE_ID,
                 description: cve.Description,
@@ -180,11 +203,16 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
                     res.redirect('/');
                 }
 
+                // Deletes the initially created file
                 fs.unlink(csvFilePath, (unlinkErr) => {
-                    if (unlinkErr) console.error('Error deleting CSV file:', unlinkErr);
+                    if (unlinkErr) {
+                        console.error('Error deleting CSV file:', unlinkErr);
+                    }
                 });
             });
     } catch (error) {
+        // Debugging
+        // console.log(error);
         return res.status(500).send('An error occured posting the export. Please try again');
     }
 });
