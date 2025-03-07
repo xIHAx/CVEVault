@@ -11,7 +11,7 @@ const { compareSync } = require("bcrypt");
 /** 
  * Function for the cleaning of descriptions
  */
-function filterDescription(desc, cwes, cpes) {
+function filterCveContent(cve) {
 
     if (desc.includes('Rejected reason:')) {
         return null;
@@ -43,6 +43,15 @@ function filterDescription(desc, cwes, cpes) {
         });
     }
 
+    if (vendors.length === 0){
+        vendors.push('-');
+    }
+
+    
+    if (products.length === 0){
+        products.push('-');
+    }
+
     return {
         filterDesc,
         filteredCwe,
@@ -66,13 +75,13 @@ router.get('/', async (req, res) => {
                                         const filteredCve = cve.toObject();
 
                                         // Filtering description
-                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
+                                        const filteredCveResults = filterCveContent(cve.Description, cve.ProblemType, cve.CPE);
 
-                                        if (filteredDesc) {
-                                            filteredCve.Description = filteredDesc.filterDesc;
-                                            filteredCve.Products = filteredDesc.products;
-                                            filteredCve.Vendors = filteredDesc.vendors;
-                                            filteredCve.ProblemType = filteredDesc.filteredCwe;
+                                        if (filteredCveResults) {
+                                            filteredCve.Description = filteredCveResults.filterDesc;
+                                            filteredCve.Products = filteredCveResults.products;
+                                            filteredCve.Vendors = filteredCveResults.vendors;
+                                            filteredCve.ProblemType = filteredCveResults.filteredCwe;
                                             return filteredCve;
                                         }
 
@@ -123,18 +132,18 @@ router.get(['/cve/:cve_id', '/favourites/cve/:cve_id'], async (req, res) => {
         const cveDetails = await cveSchema.findOne({ CVE_ID: cve_id });
         
         // Filtering description
-        const filteredDesc = filterDescription(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
+        const filteredCveResults = filterCveContent(cveDetails.Description, cveDetails.ProblemType, cveDetails.CPE);
 
-        if (!filteredDesc) {
+        if (!filteredCveResults) {
             return res.status(500).send('Attemping to access a rejected CVE page. Please try another CVE.');
         }
 
         const filteredCveDetails = {
             ...cveDetails.toObject(),
-            Description: filteredDesc.filterDesc,
-            Products: filteredDesc.products,
-            Vendors: filteredDesc.vendors,
-            ProblemType: filteredDesc.filteredCwe
+            Description: filteredCveResults.filterDesc,
+            Products: filteredCveResults.products,
+            Vendors: filteredCveResults.vendors,
+            ProblemType: filteredCveResults.filteredCwe
         }
 
         return res.render('cve',
@@ -185,7 +194,7 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
                 const filteredCve = cve.toObject();
 
                 // Filtering description
-                const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
+                const filteredDesc = filterCveContent(cve.Description, cve.ProblemType, cve.CPE);
 
                 if (filteredDesc) {
                     filteredCve.Description = filteredDesc.filterDesc;
@@ -222,10 +231,14 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
                     alert('Error downloading file');
                     res.redirect('/');
                 }
+
+                fs.unlink(csvFilePath, (unlinkErr) => {
+                    if (unlinkErr) console.error('Error deleting CSV file:', unlinkErr);
+                });
             });
     } catch (error) {
         return res.status(500).send('An error occured posting the export. Please try again');
     }
 });
 
-module.exports = { router, filterDescription };
+module.exports = { router, filterCveContent };

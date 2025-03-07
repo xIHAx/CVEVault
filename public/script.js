@@ -5,17 +5,38 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         if (event.target.id === "exportBtn") {
-            confirm("Are you sure you want to export the selected CVEs?");
+            if (!checkboxStatus()) {
+                event.preventDefault();
+                return
+            }; 
+            if (!confirm("Are you sure you want to export the selected CVEs?")) {
+                event.preventDefault();
+                return;
+            }
             handleAction("export", "exportSelected");
         }
 
         if (event.target.id === "addFavBtn") {
-            confirm("Are you sure you want to add the selected CVEs to favourites?");
+            if (!checkboxStatus()) {
+                event.preventDefault();
+                return
+            }; 
+            if (!confirm("Are you sure you want to add the selected CVEs to favourites?")) {
+                event.preventDefault();
+                return;
+            }
             handleAction("favourite", "favSelected");
         }
 
         if (event.target.id === "removeBtn") {
-            confirm("Are you sure you want to remove the selected CVEs?");
+            if (!checkboxStatus()) {
+                event.preventDefault();
+                return
+            }; 
+            if (!confirm("Are you sure you want to remove the selected CVEs?")) {
+                event.preventDefault();
+                return;
+            }
             handleAction("remove", "removeSelected");
         }
     });
@@ -67,21 +88,28 @@ function restoreButton(input) {
     parent.replaceChild(button, input);
 }
 
+function checkboxStatus(){
+    const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
+        .filter(checkbox => checkbox.checked);
+
+    if(selectedVulns.length === 0){
+        alert("Please select at least 1 CVE");
+        return false;
+    }
+    return true;
+}
+
 function handleAction(formid, inputid) {
     const selectedVulns = Array.from(document.querySelectorAll(".vuln-checkbox"))
         .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.value)
-
-    if (selectedVulns.length === 0) {
-        alert("Please select at least 1 CVE");
-        return;
-    }
+        .map(checkbox => checkbox.value);
 
     // Set input to selected cves
     document.getElementById(inputid).value = JSON.stringify(selectedVulns);
 
     // Submitting the form of the button
     document.getElementById(formid).submit();
+    
 }
 
 function filterTable(inputId) {

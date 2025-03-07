@@ -4,7 +4,7 @@ const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
 const { isLoggedIn } = require('./login');
-const { filterDescription } = require('./main');
+const { filterCveContent } = require('./main');
 
 // Ensure the routers can only be accessed on login
 router.use(isLoggedIn);
@@ -25,13 +25,13 @@ router.get('/favourites', async (req, res) => {
                                         const filteredCve = cve.toObject();
 
                                         // Filtering description
-                                        const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
+                                        const filteredCveResults = filterCveContent(cve.Description, cve.ProblemType, cve.CPE);
 
-                                        if (filteredDesc) {
-                                            filteredCve.Description = filteredDesc.filterDesc;
-                                            filteredCve.Products = filteredDesc.products;
-                                            filteredCve.Vendors = filteredDesc.vendors;
-                                            filteredCve.ProblemType = filteredDesc.filteredCwe;
+                                        if (filteredCveResults) {
+                                            filteredCve.Description = filteredCveResults.filterDesc;
+                                            filteredCve.Products = filteredCveResults.products;
+                                            filteredCve.Vendors = filteredCveResults.vendors;
+                                            filteredCve.ProblemType = filteredCveResults.filteredCwe;
                                             return filteredCve;
                                         }
 
