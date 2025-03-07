@@ -11,7 +11,7 @@ const { compareSync } = require("bcrypt");
 /** 
  * Function for the cleaning of descriptions
  */
-function filterCveContent(cve) {
+function filterCveContent(desc, cwes, cpes) {
 
     if (desc.includes('Rejected reason:')) {
         return null;
