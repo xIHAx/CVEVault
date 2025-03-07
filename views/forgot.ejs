@@ -17,7 +17,7 @@
                 <div class="card p-4 shadow-sm">
                     <div class="card-body">
                         <a href="/login" class="btn btn-link text-muted small mb-3">← Back to Login</a>
-                        <h2 class="text-center mb-3">Forgot Password</h2>
+                        <h2 class="text-center mb-3">Reset Your Password</h2>
 
                         <!-- Placeholder for Error / Success Messages -->
                         <div id="messageContainer"></div>
@@ -33,6 +33,17 @@
                                 <label for="password" class="form-label">New Password</label>
                                 <input type="password" name="password" id="password" class="form-control" required>
                                 <small id="passwordMessage" class="text-danger"></small>
+
+                                <!-- Password Strength Checklist -->
+                                <div class="password-rules mt-2">
+                                    <ul class="list-unstyled small">
+                                        <li id="lengthCheck" class="text-danger">❌ Must be at least 8 characters</li>
+                                        <li id="uppercaseCheck" class="text-danger">❌ Must include an uppercase letter</li>
+                                        <li id="lowercaseCheck" class="text-danger">❌ Must include a lowercase letter</li>
+                                        <li id="numberCheck" class="text-danger">❌ Must include a number</li>
+                                        <li id="specialCharCheck" class="text-danger">❌ Must include a special character</li>
+                                    </ul>
+                                </div>
                             </div>
 
                             <div class="mb-3">

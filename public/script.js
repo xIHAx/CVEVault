@@ -59,6 +59,48 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    const signupForm = document.querySelector("form[action='/signup']");
+    const passwordField = document.getElementById("password");
+    const confirmPasswordField = document.getElementById("confirmPassword");
+    const passwordMessage = document.createElement("small");
+
+    passwordMessage.classList.add("text-danger", "d-block", "mt-1");
+    confirmPasswordField.insertAdjacentElement("afterend", passwordMessage);
+
+    // Function to check password match
+    function checkPasswordMatch() {
+        const password = passwordField.value.trim();
+        const confirmPassword = confirmPasswordField.value.trim();
+
+        if (password.length === 0 || confirmPassword.length === 0) {
+            passwordMessage.textContent = ""; // Clear message if fields are empty
+            return false;
+        }
+
+        if (password !== confirmPassword) {
+            passwordMessage.textContent = "❌ Passwords do not match!";
+            return false;
+        } else {
+            passwordMessage.textContent = "✅ Passwords match!";
+            passwordMessage.classList.add("text-success");
+            return true;
+        }
+    }
+
+    // Check passwords on input
+    passwordField.addEventListener("input", checkPasswordMatch);
+    confirmPasswordField.addEventListener("input", checkPasswordMatch);
+
+    // Prevent form submission if passwords don’t match
+    signupForm.addEventListener("submit", (event) => {
+        if (!checkPasswordMatch()) {
+            event.preventDefault();
+            alert("Please ensure your passwords match before signing up.");
+        }
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
     const forgotPasswordForm = document.getElementById("forgotPasswordForm");
     const emailField = document.getElementById("email");
     const passwordField = document.getElementById("password");
@@ -92,7 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // Simulate backend response (Replace this with an actual API call)
         messageContainer.innerHTML = `<div class="alert alert-success text-center">Password reset successfully! Redirecting to login...</div>`;
 
         // Redirect to login after delay
