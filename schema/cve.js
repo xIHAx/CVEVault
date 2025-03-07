@@ -1,5 +1,11 @@
+/**
+ * CVE Schema file |
+ * Contains the CVE schema for MongoDB
+ */
+
 const mongoose = require('mongoose');
 
+// CVE Schema for corresponding with MongoDB
 const cveSchema = new mongoose.Schema({
     CVE_ID : String,
     Assigner : String,

@@ -2,63 +2,11 @@ const express = require("express");
 const fs = require('fs');
 const path = require('path');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const { filterCveContent } = require('../utils/utils.js')
 
 const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
-const { compareSync } = require("bcrypt");
-
-/** 
- * Function for the cleaning of descriptions
- */
-function filterCveContent(desc, cwes, cpes) {
-
-    if (desc.includes('Rejected reason:')) {
-        return null;
-    }
-
-    let filterDesc = desc.replace(/Product:\s*.*/, '').trim();
-
-    const filteredCwe = cwes.map(cwe => 
-        cwe === 'NVD-CWE-noinfo' || cwe === 'NVD-CWE-Other' ? '-' : cwe
-    );
-
-    const vendors = [];
-    const products = [];
-    const vendorDupe = new Set();
-
-    if (cpes && compareSync.length > 0) {
-        cpes.forEach(cpe => {
-            
-            if(!vendorDupe.has(cpe.vendor)) {
-                vendorDupe.add(cpe.vendor);
-                vendors.push(cpe.vendor);
-            }
-
-            if(cpe.version === '-'){
-                cpe.version = '';
-            }
-
-            products.push(`${cpe.product} ${cpe.version}`);
-        });
-    }
-
-    if (vendors.length === 0){
-        vendors.push('-');
-    }
-
-    
-    if (products.length === 0){
-        products.push('-');
-    }
-
-    return {
-        filterDesc,
-        filteredCwe,
-        products,
-        vendors
-    }
-}
 
 /**
  * GET Main Page Router |
@@ -241,4 +189,4 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
     }
 });
 
-module.exports = { router, filterCveContent };
+module.exports = router;

@@ -1,24 +1,11 @@
 /** Login Related Routes */
 
 const express = require('express');
-const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const userSchema = require('../schema/user');
 
 // Router object for route handling
 const router = express.Router();
-
-/** 
- * isLoggedIn Function | 
- * Checks if user is logged in for routers
- */
-function isLoggedIn(req, res, next) {
-    if (req.session && req.session.userid) {
-        next();
-    } else {
-        res.redirect('/login');
-    }
-}
 
 /**
  * GET Login Route | 
@@ -50,19 +37,6 @@ router.post('/login',
     async (req, res) => {
         
         try {
-            // Passing server side validation errors back
-            // Uncomment if used
-            /**
-            const errors = validationResult(req);
-            
-            if(!errors.isEmpty()){
-                return res.render('login',
-                    {
-                        errors: errors.array()
-                    }
-                );
-            }
-            */
 
             // Comparing if user exists in database
             const userCheck = await userSchema.findOne({ username: req.body.username });
@@ -118,4 +92,4 @@ router.get('/logout', (req, res) => {
     }
 });
 
-module.exports = { router, isLoggedIn };
+module.exports = router;

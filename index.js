@@ -58,9 +58,9 @@ const forgetRoutes = require('./routes/forget');
 const favRoutes = require('./routes/favourites');
 
 // Instructing the app to use these routes
-app.use('/', mainRoutes.router);
+app.use('/', mainRoutes);
 app.use('/', signupRoutes);
-app.use('/', loginRoutes.router);
+app.use('/', loginRoutes);
 app.use('/', forgetRoutes);
 app.use('/', favRoutes);
 

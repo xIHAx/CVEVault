@@ -1,14 +1,24 @@
+/**
+ * Script.JS File | 
+ * Contains the code for front end manipulation
+ * and interactions with middleware
+*/
+
+// Event Listeners
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", (event) => {
         if (event.target.classList.contains("search-btn")) {
             convertButtonToSearch(event.target);
         }
 
+        // Handling the process for when the export button is pressed
         if (event.target.id === "exportBtn") {
+            // Alert if there are no checkboxes selected
             if (!checkboxStatus()) {
                 event.preventDefault();
                 return
             }; 
+            // Confirms with user if they want to proceed
             if (!confirm("Are you sure you want to export the selected CVEs?")) {
                 event.preventDefault();
                 return;
@@ -16,11 +26,14 @@ document.addEventListener("DOMContentLoaded", () => {
             handleAction("export", "exportSelected");
         }
 
+        // Handling the process for when the add favourite button is pressed
         if (event.target.id === "addFavBtn") {
+            // Alert if there are no checkboxes selected
             if (!checkboxStatus()) {
                 event.preventDefault();
                 return
             }; 
+            // Confirms with user if they want to proceed
             if (!confirm("Are you sure you want to add the selected CVEs to favourites?")) {
                 event.preventDefault();
                 return;
@@ -28,11 +41,14 @@ document.addEventListener("DOMContentLoaded", () => {
             handleAction("favourite", "favSelected");
         }
 
+        // Handling the process for when the remove favourites button is pressed
         if (event.target.id === "removeBtn") {
+            // Alert if there are no checkboxes selected
             if (!checkboxStatus()) {
                 event.preventDefault();
                 return
-            }; 
+            };
+            // Confirms with user if they want to proceed
             if (!confirm("Are you sure you want to remove the selected CVEs?")) {
                 event.preventDefault();
                 return;
@@ -43,6 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
+/** 
+ * convertButtonToSearch function |
+ * Handles the buttons related to search
+ * by converting them into search fields when clicked
+ */
 function convertButtonToSearch(button) {
     if (!button) return;
     
@@ -76,6 +97,10 @@ function convertButtonToSearch(button) {
     });
 }
 
+/**
+ * restoreButton Function |
+ * This function restores the search fields back to buttons
+ */
 function restoreButton(input) {
     if (!input) return;
     
@@ -129,7 +154,6 @@ function filterTable(inputId) {
     }
 
     rows.forEach(row => {
-        let shouldShow = false;
         switch(inputId) {
             case 'cveSearch':
                 filteredRows = row.cells[0].textContent.toLowerCase().includes(searchTerm);

@@ -3,8 +3,7 @@ const router = express.Router();
 
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
-const { isLoggedIn } = require('./login');
-const { filterCveContent } = require('./main');
+const { filterCveContent, isLoggedIn } = require('../utils/utils.js');
 
 // Ensure the routers can only be accessed on login
 router.use(isLoggedIn);
