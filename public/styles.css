@@ -286,7 +286,7 @@ th {
     align-items: center;
 }
 .signup-error-message {
-  color: red;
+  color: #b02a37;
   font-size: 0.85rem;
   height: 1.5rem;
   position: absolute;
@@ -305,7 +305,12 @@ th {
 
 /* Login Error */
 .login-error-message {
-  color: red;
+  color: #b02a37;
   text-align: center;
   width: 100%;
+}
+
+/* Error Messages */
+.text-danger {
+  color: #b02a37 !important;
 }

@@ -63,8 +63,8 @@ router.post('/add-favourites', async (req, res) => {
         const cveExists = await cveSchema.find({_id: { $in: cve_ids } });
 
         // Debugging Code
-        console.log('Cve_Ids', cve_ids);
-        console.log('cveExists', cveExists.length);
+        //console.log('Cve_Ids', cve_ids);
+        //console.log('cveExists', cveExists.length);
 
         if(cveExists.length !== cve_ids.length) {
             return res.status(404).send('One or more CVEs selected does not exist.');

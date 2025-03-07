@@ -77,7 +77,7 @@
                 <td><%= fav.BaseMetricV3.baseScore %></td>
                 <td><%= fav.BaseMetricV3.baseSeverity %></td>
                 <td><%= fav.ProblemType %></td>
-                <td><input type="checkbox" class="vuln-checkbox" value="<%= fav._id %>"</td>
+                <td><input aria-label="Selected Vulnerabilties" type="checkbox" class="vuln-checkbox" value="<%= fav._id %>"</td>
               </tr>
             <% }); %>
           <% } %>

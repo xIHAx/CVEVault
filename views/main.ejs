@@ -37,19 +37,19 @@
         <% if (username) { %>
           <button class="btn btn-custom small"><%= username %></button>
           <form id="logout" action="/logout" method="get">
-            <button type="submit" class="btn btn-custom small">Logout</button>
+            <button aria-label="Logout" type="submit" class="btn btn-custom small">Logout</button>
           </form>
         <% } else { %>
           <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
           <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
         <% } %>
         <form id="export" action="/export-cves" method="POST">
-          <input type="hidden" name="selectedVulns" id="exportSelected">
-          <button id="exportBtn" class="btn btn-custom small">Export</button>
+          <input aria-label="Selected Vulnerabilties" type="hidden" name="selectedVulns" id="exportSelected">
+          <button aria-label="Export to CSV" id="exportBtn" class="btn btn-custom small">Export</button>
         </form>
         <form id="favourite" action="/add-favourites" method="POST">
-          <input type="hidden" name="selectedVulns" id="favSelected">
-          <button id="addFavBtn" class="btn btn-custom small">Favourite</button>
+          <input aria-label="Selected Vulnerabilties" type="hidden" name="selectedVulns" id="favSelected">
+          <button aria-label="Add to Favourites" id="addFavBtn" class="btn btn-custom small">Favourite</button>
         </form>
       </div>
     </div>
@@ -77,7 +77,7 @@
               <td><%= vuln.BaseMetricV3.baseScore %></td>
               <td><%= vuln.BaseMetricV3.baseSeverity %></td>
               <td><%= vuln.ProblemType %></td>
-              <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
+              <td><input aria-label="Select CVE" type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
             </tr>
           <% }); %>
         </tbody>
