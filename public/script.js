@@ -58,6 +58,50 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+    const emailField = document.getElementById("email");
+    const passwordField = document.getElementById("password");
+    const confirmPasswordField = document.getElementById("confirmPassword");
+    const passwordMessage = document.getElementById("passwordMessage");
+    const confirmPasswordMessage = document.getElementById("confirmPasswordMessage");
+    const messageContainer = document.getElementById("messageContainer");
+
+    if (!forgotPasswordForm) return; // Ensure form exists before adding event listener
+
+    forgotPasswordForm.addEventListener("submit", (event) => {
+        event.preventDefault(); // Prevent page reload on form submission
+
+        // Clear previous messages
+        passwordMessage.textContent = "";
+        confirmPasswordMessage.textContent = "";
+        messageContainer.innerHTML = "";
+
+        const password = passwordField.value.trim();
+        const confirmPassword = confirmPasswordField.value.trim();
+
+        // Validate password length
+        if (password.length < 8) {
+            passwordMessage.textContent = "Password must be at least 8 characters.";
+            return;
+        }
+
+        // Validate password match
+        if (password !== confirmPassword) {
+            confirmPasswordMessage.textContent = "Passwords do not match!";
+            return;
+        }
+
+        // Simulate backend response (Replace this with an actual API call)
+        messageContainer.innerHTML = `<div class="alert alert-success text-center">Password reset successfully! Redirecting to login...</div>`;
+
+        // Redirect to login after delay
+        setTimeout(() => {
+            window.location.href = "/login";
+        }, 2000);
+    });
+});
+
 
 function convertButtonToSearch(button) {
     if (!button) return;
