@@ -38,11 +38,11 @@
         <form id="logout" action="/logout" method="get">
             <button type="submit" class="btn btn-custom small">Logout</button>
         </form>
-        <form id="export" action="/export-cves" method="POST">
+        <form id="export" action="/favourites/export-cves" method="POST">
           <input type="hidden" name="selectedVulns" id="exportSelected">
           <button id="exportBtn" class="btn btn-custom small">Export</button>
         </form>
-        <form id="remove" action="/remove-favourites" method="POST">
+        <form id="remove" action="/favourites/remove-favourites" method="POST">
           <input type="hidden" name="selectedVulns" id="removeSelected">
           <button id="removeBtn" class="btn btn-custom small">Remove</button>
         </form>
@@ -71,7 +71,7 @@
           <% } else { %>
             <% favourites.forEach(fav => { %>
               <tr>
-                <td><a href='/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
+                <td><a href='/favourites/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
                 <td><%= fav.Vendors %></td>
                 <td><%= fav.Products %></td>
                 <td><%= fav.BaseMetricV3.baseScore %></td>

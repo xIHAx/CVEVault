@@ -4,7 +4,7 @@ const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
 const { isLoggedIn } = require('./login');
-const { filterDescription } = require('./mainpage');
+const { filterDescription } = require('./main');
 
 // Ensure the routers can only be accessed on login
 router.use(isLoggedIn);
@@ -89,7 +89,7 @@ router.post('/add-favourites', async (req, res) => {
  * Handles the removal of favourites
  * from a user
  */
-router.post('/remove-favourites', async (req, res) => {
+router.post('/favourites/remove-favourites', async (req, res) => {
     try {
         const user_id = req.session.userid;
         const cve_ids = JSON.parse(req.body.selectedVulns || "[]");

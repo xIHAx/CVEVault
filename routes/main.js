@@ -1,4 +1,8 @@
 const express = require("express");
+const fs = require('fs');
+const path = require('path');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+
 const router = express.Router();
 const cveSchema = require('../schema/cve');
 const userSchema = require('../schema/user');
@@ -111,7 +115,7 @@ router.get('/', async (req, res) => {
  * GET CVE Router |
  * Retrieves and sends data for the selected CVE
  */
-router.get('/cve/:cve_id', async (req, res) => {
+router.get(['/cve/:cve_id', '/favourites/cve/:cve_id'], async (req, res) => {
 
     try {
         // Retrieving CVE ID from URL
@@ -146,10 +150,79 @@ router.get('/cve/:cve_id', async (req, res) => {
 /**
  * Export CSV POST Router |
  */
-router.post('/export-cve', async (req, res) => {
+router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
     try {
         const cve_ids = JSON.parse(req.body.selectedVulns || "[]");
 
+        // Ensure the cve select exists
+        const cveDetails = await cveSchema.find({_id: { $in: cve_ids}})
+
+        // Ensure cves are found
+        const csvFilePath = path.join(__dirname, '..', 'exports', `csv_export_${Date.now()}.csv`);
+
+        // Creating CSV Writer
+        const csvWriter = createCsvWriter({
+            path: csvFilePath,
+            header: [
+                { id: 'cve_id', title: 'CVE ID'},
+                { id: 'description', title: 'Description' },
+                { id: 'product', title: 'Product'},
+                { id: 'vendor', title:'Vendor'},
+                { id: 'basescore', title: 'Base Score'},
+                { id: 'baseseverity', title: 'Base Severity'},
+                { id: 'cvss', title: 'CVSS'},
+                { id: 'expscore', title: 'Exploitability Score'},
+                { id: 'impactscore', title: 'Impact Score'},
+                { id: 'cwe_id', title: 'CWE-ID'},
+                { id: 'references', title: 'References'}
+            ]
+        });
+
+        // Filtering CVE Details
+        const filteredCveDetails = cveDetails
+            .map(cve => {
+                // Assigning original cve details to protect original data
+                const filteredCve = cve.toObject();
+
+                // Filtering description
+                const filteredDesc = filterDescription(cve.Description, cve.ProblemType, cve.CPE);
+
+                if (filteredDesc) {
+                    filteredCve.Description = filteredDesc.filterDesc;
+                    filteredCve.Products = filteredDesc.products;
+                    filteredCve.Vendors = filteredDesc.vendors;
+                    filteredCve.ProblemType = filteredDesc.filteredCwe;
+                    return filteredCve;
+                }
+
+                return null;
+            })
+            .filter(Boolean);
+
+            const csvData = filteredCveDetails.map(cve => ({
+                cve_id: cve.CVE_ID,
+                description: cve.Description,
+                product: cve.Products,
+                vendor: cve.Vendors,
+                basescore: cve.BaseMetricV3.baseScore,
+                baseseverity: cve.BaseMetricV3.baseSeverity,
+                cvss: cve.BaseMetricV3.vectorString,
+                expscore: cve.BaseMetricV3.exploitabilityScore,
+                impactscore: cve.BaseMetricV3.impactScore,
+                cwe_id: cve.ProblemType,
+                references: cve.References
+            }));
+
+            // Write to csv file
+            await csvWriter.writeRecords(csvData);
+
+            // Downloading of CSV file
+            res.download(csvFilePath, 'exported_cves.csv', (err) => {
+                if (err) {
+                    alert('Error downloading file');
+                    res.redirect('/');
+                }
+            });
     } catch (error) {
         return res.status(500).send('An error occured posting the export. Please try again');
     }
