@@ -74,8 +74,8 @@
               <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
               <td><%= vuln.Vendors %></td>
               <td><%= vuln.Products %></td>
-              <td><%= vuln.BaseMetricV3.baseScore %></td>
-              <td><%= vuln.BaseMetricV3.baseSeverity %></td>
+              <td><%= vuln.BaseMetricV3.baseScore || "-" %></td>
+              <td><%= vuln.BaseMetricV3.baseSeverity || "-" %></td>
               <td><%= vuln.ProblemType %></td>
               <td><input aria-label="Select CVE" type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
             </tr>

@@ -28,11 +28,11 @@
 
     <!-- CVE Scores Section -->
     <div class="cve-scores">
-      <div class="score-box"><strong>Base score</strong><br><span><%= cve.BaseMetricV3.baseScore %></span></div>
-      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.BaseMetricV3.baseSeverity %></span></div>
-      <div class="score-box"><strong>CVSS</strong><br><span><%= cve.BaseMetricV3.vectorString %></span></div>
-      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.BaseMetricV3.exploitabilityScore %></span></div>
-      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.BaseMetricV3.impactScore %></span></div>
+      <div class="score-box"><strong>Base score</strong><br><span><%= cve.BaseMetricV3.baseScore || "-" %></span></div>
+      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.BaseMetricV3.baseSeverity || "-" %></span></div>
+      <div class="score-box"><strong>CVSS</strong><br><span><%= cve.BaseMetricV3.vectorString || "-" %></span></div>
+      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.BaseMetricV3.exploitabilityScore || "-"%></span></div>
+      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.BaseMetricV3.impactScore || "-" %></span></div>
     </div>
 
     <!-- CWE and References Section -->

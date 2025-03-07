@@ -74,8 +74,8 @@
                 <td><a href='/favourites/cve/<%= fav.CVE_ID %>'><%= fav.CVE_ID %></a></td>
                 <td><%= fav.Vendors %></td>
                 <td><%= fav.Products %></td>
-                <td><%= fav.BaseMetricV3.baseScore %></td>
-                <td><%= fav.BaseMetricV3.baseSeverity %></td>
+                <td><%= fav.BaseMetricV3.baseScore || "-" %></td>
+                <td><%= fav.BaseMetricV3.baseSeverity || "-" %></td>
                 <td><%= fav.ProblemType %></td>
                 <td><input aria-label="Selected Vulnerabilties" type="checkbox" class="vuln-checkbox" value="<%= fav._id %>"</td>
               </tr>
