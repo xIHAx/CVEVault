@@ -51,7 +51,7 @@ app.use(session({
 /** Handling Routes */
 
 // Adding route handlers
-const mainRoutes = require('./routes/mainpage');
+const mainRoutes = require('./routes/main');
 const loginRoutes = require('./routes/login');
 const signupRoutes = require('./routes/signup');
 const forgetRoutes = require('./routes/forget');
