@@ -58,7 +58,7 @@ router.post('/login',
             }
 
             // Comparing if password is correct
-            const passwordCheck = await bcrypt.compare(req.body.password, userCheck.password);
+            const passwordCheck = bcrypt.compare(req.body.password, userCheck.password);
 
             // If password check fails re-render page with error
             if(!passwordCheck){
