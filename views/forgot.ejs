@@ -15,18 +15,13 @@
         <div class="row justify-content-center">
             <div class="col-md-5">
                 <div class="card p-4 shadow-sm">
-            <div class="col-md-5">
-                <div class="card p-4 shadow-sm">
                     <div class="card-body">
                         <a href="/login" class="btn btn-link text-muted small mb-3">← Back to Login</a>
-                        <h2 class="text-center mb-3">Forgot Password</h2>
+                        <h2 class="text-center mb-3">Reset Your Password</h2>
 
                         <!-- Placeholder for Error / Success Messages -->
                         <div id="messageContainer"></div>
-                        <!-- Placeholder for Error / Success Messages -->
-                        <div id="messageContainer"></div>
 
-                        <!-- Forgot Password Form -->
                         <form action="/forgot" method="POST" id="forgotPasswordForm" >
                             <div class="mb-3">
                                 <label for="email" class="form-label">Enter your email</label>
@@ -36,18 +31,6 @@
                                         <%= emailError %>
                                     </div>
                                 <% } %>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="password" class="form-label">New Password</label>
-                                <input type="password" name="password" id="password" class="form-control" required>
-                                <small id="passwordMessage" class="text-danger"></small>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="confirmPassword" class="form-label">Confirm Password</label>
-                                <input type="password" id="confirmPassword" class="form-control" required>
-                                <small id="confirmPasswordMessage" class="text-danger"></small>
                             </div>
 
                             <div class="mb-3">

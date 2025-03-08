@@ -135,7 +135,7 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
         const cveDetails = await cveSchema.find({_id: { $in: cve_ids}})
 
         // Ensure cves are found
-        const csvFilePath = path.join(__dirname, '..', 'exports', `csv_export_${Date.now()}.csv`);
+        const csvFilePath = path.join(__dirname, '..', `csv_export_${Date.now()}.csv`);
 
         // Creating CSV Writer
         const csvWriter = createCsvWriter({
@@ -212,7 +212,7 @@ router.post(['/export-cves', '/favourites/export-cves'], async (req, res) => {
             });
     } catch (error) {
         // Debugging
-        // console.log(error);
+        console.log(error);
         return res.status(500).send('An error occured posting the export. Please try again');
     }
 });

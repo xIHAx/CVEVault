@@ -149,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!forgotPasswordForm) return; // Ensure form exists before adding event listener
 
     forgotPasswordForm.addEventListener("submit", (event) => {
-        event.preventDefault(); // Prevent page reload on form submission
+        //event.preventDefault(); // Prevent page reload on form submission
 
         // Clear previous messages
         passwordMessage.textContent = "";

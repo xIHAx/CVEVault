@@ -46,7 +46,7 @@ router.post('/forgot', async (req, res) => {
     try{
         // Finding user with email inputted
         const userCheck = await userSchema.findOne({ email: req.body.email });
-
+        console.log(userCheck)
         // If email does not exist re-render page with error
         if(!userCheck){
             return res.render('forgot', 

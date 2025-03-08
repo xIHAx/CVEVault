@@ -49,7 +49,7 @@
         </form>
         <form id="favourite" action="/add-favourites" method="POST">
           <input aria-label="Selected Vulnerabilties" type="hidden" name="selectedVulns" id="favSelected">
-          <button aria-label="Add to Favourites" id="addFavBtn" class="btn btn-custom small">Favourite</button>
+          <button aria-label="Add to Favourites" id="addFavBtn" class="btn btn-custom small">Add to Favourites</button>
         </form>
       </div>
     </div>
@@ -69,18 +69,6 @@
           <th>Select</th>
         </tr>
       </thead>
-      <tbody>
-        <% vulnerabilities.forEach(vuln => { %>
-          <tr>
-            <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
-            <td><%= vuln.Vendors %></td>
-            <td><%= vuln.Products %></td>
-            <td><%= vuln.BaseMetricV3.baseScore %></td>
-            <td><%= vuln.BaseMetricV3.baseSeverity %></td>
-            <td><%= vuln.ProblemType %></td>
-            <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
-          </tr>
-        </thead>
         <tbody>
           <% vulnerabilities.forEach(vuln => { %>
             <tr>
