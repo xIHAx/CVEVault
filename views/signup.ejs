@@ -22,7 +22,7 @@
                         <div class="row">
                             <!-- Sign Up Form -->
                             <div class="col-md-6">
-                                <form action="/signup" method="POST">
+                                <form id="signupForm" action="/signup" method="POST">
                                     <!-- Username Input -->
                                     <div class="mb-4 signup-error-container">
                                         <div class="signup-input-wrapper">
@@ -30,9 +30,7 @@
                                                 <label for="username" class="form-label">Username</label>
                                                 <input type="text" name="username" id="username" class="form-control input-custom" placeholder="Enter your username" autocomplete="username" required>
                                                 <% if (nameError) { %>
-                                                    <div class="signup-error-message">
-                                                        <%= nameError %>
-                                                    </div>
+                                                    <div class="signup-error-message"><%= nameError %></div>
                                                 <% } %>
                                             </div>
                                         </div>

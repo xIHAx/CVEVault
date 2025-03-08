@@ -55,17 +55,30 @@
     </div>
 
     <!-- CVE Table -->
-    <div class="table-container">
-      <table class="table" id="mainTable">
-        <thead>
+<div class="table-container">
+  <div class="table-responsive">  <!-- Enables Bootstrap's responsive scrolling -->
+    <table class="table table-bordered" id="mainTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Vendor</th>
+          <th>Product</th>
+          <th>Base Score</th>
+          <th>Base Severity</th>
+          <th>CWE</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% vulnerabilities.forEach(vuln => { %>
           <tr>
-            <th>ID</th>
-            <th>Vendor</th>
-            <th>Product</th>
-            <th>Base Score</th>
-            <th>Base Severity</th>
-            <th>CWE</th>
-            <th>Select</th>
+            <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
+            <td><%= vuln.Vendors %></td>
+            <td><%= vuln.Products %></td>
+            <td><%= vuln.BaseMetricV3.baseScore %></td>
+            <td><%= vuln.BaseMetricV3.baseSeverity %></td>
+            <td><%= vuln.ProblemType %></td>
+            <td><input type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
           </tr>
         </thead>
         <tbody>
@@ -84,6 +97,7 @@
       </table>
     </div>
   </div>
+</div>
 
   <script src="/script.js"></script>
 </body>
