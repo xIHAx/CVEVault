@@ -12,6 +12,7 @@ Clone or download the repo and run the cmd 'npm install'. The required packages 
 
 ## Usage
 After installation, proceed with the signup account if you want to use the additional features. Else it can be used as normal.
+A demonstration can be found here: https://youtu.be/28P5TY2EnOQ
 
 ## Support
 Sorry no support channels are available. There is no certainty that development will continue after the project.
