@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Page</title>
+
+  <!-- Bootstrap CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Link to external CSS -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+  <div class="container main-container">
+    <!-- Header -->
+    <h1 class="text-center title">Main Page</h1>
+
+    <!-- Top Buttons Layout -->
+    <div class="top-buttons">
+      <!-- Left Side Buttons -->
+      <div class="left-buttons">
+        <button class="btn btn-custom" onclick="window.location.href='/favourites'">Favourites</button>
+        <button id="cveBtn" class="search-btn btn btn-custom">CVE ID Search</button>
+      </div>
+
+      <!-- Center Buttons -->
+      <div class="center-buttons">
+        <button id="vendorBtn" class="search-btn btn btn-custom">Vendor Search</button>
+        <button id="productBtn" class="search-btn btn btn-custom">Product Search</button>
+      </div>
+
+      <!-- Right Side Buttons -->
+      <div class="right-buttons">
+        <% if (username) { %>
+          <button class="btn btn-custom small"><%= username %></button>
+          <form id="logout" action="/logout" method="get">
+            <button aria-label="Logout" type="submit" class="btn btn-custom small">Logout</button>
+          </form>
+        <% } else { %>
+          <button class="btn btn-custom small" onclick="window.location.href='/login'">Login</button>
+          <button class="btn btn-custom small" onclick="window.location.href='/signup'">Sign Up</button>
+        <% } %>
+        <form id="export" action="/export-cves" method="POST">
+          <input aria-label="Selected Vulnerabilties" type="hidden" name="selectedVulns" id="exportSelected">
+          <button aria-label="Export to CSV" id="exportBtn" class="btn btn-custom small">Export</button>
+        </form>
+        <form id="favourite" action="/add-favourites" method="POST">
+          <input aria-label="Selected Vulnerabilties" type="hidden" name="selectedVulns" id="favSelected">
+          <button aria-label="Add to Favourites" id="addFavBtn" class="btn btn-custom small">Add to Favourites</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- CVE Table -->
+<div class="table-container">
+  <div class="table-responsive">  <!-- Enables Bootstrap's responsive scrolling -->
+    <table class="table table-bordered" id="mainTable">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Vendor</th>
+          <th>Product</th>
+          <th>Base Score</th>
+          <th>Base Severity</th>
+          <th>CWE</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+        <tbody>
+          <% vulnerabilities.forEach(vuln => { %>
+            <tr>
+              <td><a href='/cve/<%= vuln.CVE_ID %>'><%= vuln.CVE_ID %></a></td>
+              <td><%= vuln.Vendors %></td>
+              <td><%= vuln.Products %></td>
+              <td><%= vuln.BaseMetricV3.baseScore || "-" %></td>
+              <td><%= vuln.BaseMetricV3.baseSeverity || "-" %></td>
+              <td><%= vuln.ProblemType %></td>
+              <td><input aria-label="Select CVE" type="checkbox" class="vuln-checkbox" value="<%= vuln._id %>"></td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+  <script src="/script.js"></script>
+</body>
+</html>

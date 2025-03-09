@@ -1,0 +1,331 @@
+/* Global Styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  text-align: center;
+}
+
+/* Main Container */
+.main-container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+/* Page Title */
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Top Buttons Layout */
+.top-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 5px 0;
+}
+
+/* Left Buttons */
+.left-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Center Buttons */
+.center-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+/* Right Buttons - Adjusted Layout */
+.right-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 8px;
+  justify-content: end;
+}
+
+/* Button Styling */
+.btn-custom {
+  background: #e0e0e0;
+  border: 2px solid black;
+  padding: 6px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+/* Small Buttons (Login, Sign Up, Save, Remove) */
+.btn-custom.small {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+/* Table Styling */
+.table-container {
+  background: #d3d3d3;
+  padding: 15px;
+  border-radius: 10px;
+  width: 95%;
+  margin: auto;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  table-layout: fixed;
+  word-wrap: break-word;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background: white;
+  font-weight: bold;
+}
+
+
+/* Search Bar Styling */
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Search Input Styling */
+.search-input {
+  width: 200px;
+  height: 30px;
+  border-radius: 20px;
+  border: 2px solid black;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+  outline: none;
+}
+
+
+/* CVE Title */
+.cve-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* CVE Information Box */
+.cve-info {
+  background: #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.cve-header, .cve-header-values {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.cve-box {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+}
+
+/* CVE Scores Section */
+.cve-scores {
+  display: flex;
+  justify-content: space-evenly;
+  background: #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.score-box {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+  width: 150px;
+}
+
+/* CWE-ID & References */
+.cve-extra {
+  display: flex;
+  justify-content: space-evenly;
+  background: #ddd;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.cwe-box {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+  width: 150px;
+}
+
+.reference-box {
+  flex: 2;
+  padding: 10px;
+  border: 1px solid black;
+  background: white;
+  margin-left: 10px;
+}
+
+/* Back Button */
+.back-btn {
+  display: block;
+  width: 150px;
+  margin: 20px auto;
+  padding: 10px;
+  text-align: center;
+  border: none;
+  background: #555;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.back-btn:hover {
+  background: #333;
+}
+
+/* Centering the login box */
+.login-box {
+  background: #e0e0e0;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+/* Styling for inputs */
+.login-input {
+  border: 2px solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Social Login Buttons */
+.social-btn {
+  width: 120px;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+/* Sign in Button */
+.login-btn {
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+/* Back to Main Link */
+.back-to-main {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
+/* Custom Background for Forms */
+.bg-custom {
+  background: #e0e0e0;
+  border-radius: 10px;
+}
+
+/* Input Field Styling */
+.input-custom {
+  border: 2px solid black;
+  border-radius: 20px;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Password Complexity Box */
+.password-box {
+  background: #f8f9fa;
+  text-align: center;
+  font-size: 14px;
+  padding: 15px;
+  border-radius: 10px;
+  width: 250px;
+  border: 2px solid black;
+}
+
+/* Password Strength Bar */
+.progress {
+  height: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Sign Up Errors */
+.signup-error-container {
+    display: flex;
+    align-items: center;
+}
+
+.signup-error-message {
+  color: #b02a37;
+  font-size: 0.85rem;
+  height: 1.5rem;
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.signup-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* Login Error */
+.login-error-message {
+  color: #b02a37;
+  text-align: center;
+  width: 100%;
+}
+
+/* Forgot Password Page */
+.card {
+  background: white;
+  border-radius: 12px;
+  text-align: center;
+}
+
+/* Form Styling */
+.form-control {
+  border: 1.8px solid black;
+  border-radius: 18px;
+  font-weight: 500;
+  text-align: center;
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= cve.CVE_ID %></title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- CVE Title -->
+    <h2 class="cve-title"><%= cve.CVE_ID %></h2>
+
+    <!-- CVE Information Table -->
+    <div class="cve-info">
+      <div class="cve-header">
+        <div class="cve-box"><strong>Description</strong></div>
+        <div class="cve-box"><strong>Product</strong></div>
+        <div class="cve-box"><strong>Vendor</strong></div>
+      </div>
+
+      <div class="cve-header-values">
+        <div class="cve-box"><%= cve.Description || "No description available" %></div>
+        <div class="cve-box"><%= cve.Products %></div>
+        <div class="cve-box"><%= cve.Vendors %></div>
+      </div>
+    </div>
+
+    <!-- CVE Scores Section -->
+    <div class="cve-scores">
+      <div class="score-box"><strong>Base score</strong><br><span><%= cve.BaseMetricV3.baseScore || "-" %></span></div>
+      <div class="score-box"><strong>Base severity</strong><br><span><%= cve.BaseMetricV3.baseSeverity || "-" %></span></div>
+      <div class="score-box"><strong>CVSS</strong><br><span><%= cve.BaseMetricV3.vectorString || "-" %></span></div>
+      <div class="score-box"><strong>Exploitability score</strong><br><span><%= cve.BaseMetricV3.exploitabilityScore || "-"%></span></div>
+      <div class="score-box"><strong>Impact score</strong><br><span><%= cve.BaseMetricV3.impactScore || "-" %></span></div>
+    </div>
+
+    <!-- CWE and References Section -->
+    <div class="cve-extra">
+      <div class="cwe-box"><strong>CWE-ID</strong><br><span><%= cve.ProblemType %></span></div>
+      <div class="reference-box">
+        <strong>References</strong>
+        <p><%= cve.References %></p>
+      </div>
+    </div>
+
+    <!-- Back Button -->
+    <button onclick="window.history.back()" class="back-btn">🔙 Back</button>
+  </div>
+</body>
+</html>
