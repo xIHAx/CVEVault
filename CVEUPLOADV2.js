@@ -1,10 +1,14 @@
+/**
+ * Javascript file to handle the upload of CVEs to the mongodb
+ */
+
 const mongoose = require('mongoose');
 const fs = require('fs');
 
 // Define MongoDB connection URL
 const MONGO_URI = '<Mongodb URI GOES HERE Removed for gitlab>';
 
-// Define Mongoose schema with nested BaseMetricV3 and CPE data
+// Define Base Metric V3 Schema
 const baseMetricV3Schema = new mongoose.Schema({
     version: String,
     vectorString: String,
@@ -22,6 +26,7 @@ const baseMetricV3Schema = new mongoose.Schema({
     impactScore: Number
 }, { _id: false });
 
+// Define CPE schema
 const cpeSchema = new mongoose.Schema({
     part: String,
     vendor: String,
@@ -30,6 +35,7 @@ const cpeSchema = new mongoose.Schema({
     update: String
 }, { _id: false });
 
+// Define CVE data schema with nested BaseMetricV3 and CPE data
 const dataSchema = new mongoose.Schema({
     CVE_ID: String,
     Assigner: String,
@@ -52,12 +58,17 @@ mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     })
     .catch(err => console.error('MongoDB connection error:', err));
 
+/**
+ * processJSONFile |
+ * Handles the structuring of CVE data and uploading to db
+ */
 function processJSONFile(filePath) {
     try {
         const rawData = fs.readFileSync(filePath, 'utf-8');
         const jsonData = JSON.parse(rawData);
         let results = [];
 
+        // Looping through each item
         jsonData.CVE_Items.forEach(item => {
             const cveMeta = item.cve.CVE_data_meta || {};
             const descriptionData = item.cve.description?.description_data || [];
@@ -67,16 +78,17 @@ function processJSONFile(filePath) {
             const cvssV3Data = impactData.cvssV3 || {};
             const affectedData = item.configurations?.nodes || [];
 
-            // Extract CWE values
+            // Extract CWE IDs
             let problemTypes = problemTypeData.flatMap(entry => 
                 entry.description ? entry.description.map(desc => desc.value) : []
             );
 
-            // Extract and parse CPE data into structured format
+            // Extract and processing CPE data into structured format
             let cpeData = affectedData.flatMap(node => 
                 node.cpe_match ? node.cpe_match.map(cpe => parseCPE(cpe.cpe23Uri)) : []
             );
 
+            // Setting the structure of data to be uploaded
             let extractedData = {
                 CVE_ID: cveMeta.ID || "Unknown",
                 Assigner: cveMeta.ASSIGNER || "Unknown",
@@ -107,6 +119,7 @@ function processJSONFile(filePath) {
             results.push(extractedData);
         });
 
+        // Uploading the data to the database
         if (results.length > 0) {
             DataModel.insertMany(results)
                 .then(() => {
@@ -118,6 +131,7 @@ function processJSONFile(filePath) {
             console.log('No valid CVE data found.');
             mongoose.connection.close();
         }
+    // Error handling
     } catch (error) {
         console.error('Error processing JSON file:', error);
     }
